@@ -195,8 +195,17 @@
   .fr-phs input:checked+span{border-color:var(--sun);background:#fff8ea}
   .fr-phs input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
   .fr-note{display:block;text-align:center;color:var(--ink-soft);font-size:13.5px;margin-top:8px}
-  .fr-phone{background:var(--cream);border-radius:18px;padding:16px;display:grid;gap:12px;text-align:center}
-  .fr-phone b{font-size:22px;letter-spacing:.05em}
+  .fr-phone{background:#fff}
+  .fr-ph{padding:14px 16px 4px;font-size:15px}.fr-ph b{font-size:21px;letter-spacing:.05em}
+  .fr-link{display:block;margin:10px auto 0;background:none;border:0;color:var(--ink-soft);font:600 14.5px var(--fb);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .fr-link:hover{color:var(--ink)}
+  .fr-first{font-weight:700;font-size:15.5px;margin:2px 0 12px;color:var(--ink)}
+  .fr-b .fl input{font-size:18px}
+  .cf{background:var(--cream);border-radius:16px;padding:14px 16px;text-align:center;font-size:15.5px;color:var(--ink-soft);margin-bottom:12px}
+  .cf-em{font-size:22px;font-weight:700;color:var(--ink);margin:6px 0 8px;word-break:break-all}
+  .cf-ck{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:15.5px;margin:0 0 14px;padding:10px 12px;border-radius:12px;border:2px solid transparent}
+  .cf-ck.bad{border-color:var(--rose);background:#fff5f2}
+  .cf-ck input{width:22px;height:22px;flex:none;accent-color:var(--ink);margin-top:1px}
   /* otp */
   .otp-box{max-width:520px;margin:0 auto;text-align:center}
   .otp{display:flex;gap:10px;justify-content:center;direction:ltr;margin:6px 0 18px}
@@ -388,7 +397,7 @@
 <div id="shab" role="dialog" aria-modal="true"></div>
 <div id="toast" role="status"></div>
 
-<script id="site-data" type="application/json">{"_v":1794121547092,"brand":"בית הספר לבנות נטעים","seo":{"title":"הזמנת ספרים | בית הספר","desc":"מערכת הזמנת ספרים לתלמידות בית הספר – בוחרים, מאשרים ומשלמים בכמה לחיצות."},"set":{"pass":"p2$836d0cdd09d664089ebb8e4922f9fa4a$05913072f5d3d9df4bd9ca34d32f48930d9d2aa8e586ba50bd99a30088a5bd5c","api":"https://script.google.com/macros/s/AKfycbx3nUlVjamv7sasnLwsyEsF1fkH_3vIsQI8mtAyFMRJlVEFnylslbvvS9xIuRAjBl0m/exec","year":"תשפ״ז","deadline":"2026-12-31","otp":"email","phone":"0000000000","email":"","wa":"","shabbat":false,"chat":true,"site":"https://bsmevobooks.github.io/books/"},"texts":{"h1":"הזמנת ספרים\nלשנת הלימודים *תשפ״ז*","lead":"כל הספרים של הבנות – בהזמנה אחת, מהבית, בכמה לחיצות. בוחרים, מאשרים, ובספטמבר הכול מחכה בכיתה.","thanks":"תודה על הזמנתך!","arrive":"תקבלו עדכון מיד כשהספרים יגיעו","line":"מערכת הזמנת הספרים של בית הספר","closed":"מועד הזמנת הספרים הסתיים. לשאלות ניתן לפנות למזכירות בית הספר.","how":[{"i":"👧","t":"מזהים","s":"בוחרים את שם התלמידה ומאמתים בקוד שנשלח למייל"},{"i":"📚","t":"מסמנים","s":"רק הספרים של הכיתה שלה מופיעים – מסמנים וי"},{"i":"💳","t":"משלמים","s":"הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות"},{"i":"😊","t":"מקבלים","s":"נעדכן אתכם מיד כשהספרים מגיעים"}]},"grades":["א","ב","ג","ד","ה","ו","ז","ח"],"books":[{"id":"b1","t":"חומש בראשית עם פירוש רש״י","pub":"","sub":"לימודי קודש","price":48,"grades":["ב","ג","ד","ה","ו","ז","ח"],"on":true},{"id":"b2","t":"סידור תפילה לתלמידה","pub":"","sub":"לימודי קודש","price":35,"grades":["א","ב","ג"],"on":true},{"id":"b3","t":"נביא – ספר יהושע","pub":"","sub":"לימודי קודש","price":32,"grades":["ד","ה"],"on":true},{"id":"b4","t":"דינים והליכות – חוברת עבודה","pub":"","sub":"לימודי קודש","price":28,"grades":["ה","ו","ז","ח"],"on":true},{"id":"b5","t":"קריאה ראשונה – מקראה","pub":"","sub":"עברית ולשון","price":42,"grades":["א"],"on":true},{"id":"b6","t":"עברית בשמחה – חוברת עבודה","pub":"","sub":"עברית ולשון","price":38,"grades":["ב","ג","ד"],"on":true},{"id":"b7","t":"לשון והבעה","pub":"","sub":"עברית ולשון","price":44,"grades":["ה","ו","ז","ח"],"on":true},{"id":"b8","t":"חשבון לכיתה – חלק א׳","pub":"","sub":"חשבון","price":39,"grades":["א","ב","ג","ד","ה","ו"],"on":true},{"id":"b9","t":"חשבון לכיתה – חלק ב׳","pub":"","sub":"חשבון","price":39,"grades":["א","ב","ג","ד","ה","ו"],"on":true},{"id":"b10","t":"מתמטיקה – ספר לימוד","pub":"","sub":"חשבון","price":56,"grades":["ז","ח"],"on":true},{"id":"b11","t":"English Workbook","pub":"","sub":"אנגלית","price":52,"grades":["ד","ה","ו","ז","ח"],"on":true},{"id":"b12","t":"מדעים – חוברת חקר","pub":"","sub":"מדעים","price":34,"grades":["ג","ד","ה","ו"],"on":true},{"id":"b13","t":"אטלס ארץ ישראל","pub":"","sub":"כללי","price":65,"grades":["ד","ה","ו","ז","ח"],"on":true},{"id":"b14","t":"סט מחברות וכלי כתיבה","pub":"","sub":"כללי","price":25,"grades":[],"on":true}],"pay":[{"id":"hk","on":true,"ico":"🏦","name":"הוראת קבע","title":"לתשלום בהוראת קבע המעודכנת בבית הספר","sub":"הסכום ייגבה בהוראת הקבע הקיימת","after":"הסכום ייגבה בהוראת הקבע המעודכנת בבית הספר. נשלח לכם מייל כשהגבייה תתבצע.","link":""},{"id":"credit","on":true,"ico":"💳","name":"כרטיס אשראי","title":"לתשלום באשראי","sub":"תשלום מאובטח בכרטיס אשראי","after":"בשלב הבא תועברו לדף תשלום מאובטח.","link":""},{"id":"cash","on":true,"ico":"💵","name":"מזומן או צ׳ק","title":"לתשלום במזומן או בצ׳ק","sub":"מעבירים למזכירות בית הספר","after":"את התשלום מעבירים למזכירות בית הספר, במעטפה עם שם התלמידה והכיתה.","link":""}],"faq":[{"q":"עד מתי אפשר להזמין או לשנות?","a":"עד התאריך שמופיע במסך הבית. עד אז אפשר להיכנס שוב ולשנות ספרים או אמצעי תשלום."},{"q":"לא קיבלתי קוד אימות","a":"הקוד נשלח למייל שרשום בבית הספר. כדאי לחכות דקה ולבדוק גם בתיקיית הספאם. אם המספר לא מוכר למערכת – פונים למזכירות לעדכון הפרטים."},{"q":"איך משנים הזמנה?","a":"נכנסים למסך הבית ולוחצים על \"לשינוי ההזמנה או אמצעי תשלום\". אחרי אימות קצר אפשר לעדכן."},{"q":"אילו אמצעי תשלום יש?","a":"הוראת קבע המעודכנת בבית הספר, כרטיס אשראי, או מזומן / צ׳ק במזכירות."},{"q":"מתי יגיעו הספרים?","a":"נשלח לכם עדכון ברגע שהספרים יגיעו לבית הספר."}],"theme":{},"_s":"mw7hn9lg"}</script>
+<script id="site-data" type="application/json">{"_v":1794141269545,"brand":"בית הספר לבנות נטעים","seo":{"title":"הזמנת ספרים | בית הספר","desc":"מערכת הזמנת ספרים לתלמידות בית הספר – בוחרים, מאשרים ומשלמים בכמה לחיצות."},"set":{"pass":"p2$836d0cdd09d664089ebb8e4922f9fa4a$05913072f5d3d9df4bd9ca34d32f48930d9d2aa8e586ba50bd99a30088a5bd5c","api":"https://script.google.com/macros/s/AKfycbx3nUlVjamv7sasnLwsyEsF1fkH_3vIsQI8mtAyFMRJlVEFnylslbvvS9xIuRAjBl0m/exec","year":"תשפ״ז","deadline":"2026-12-31","otp":"email","phone":"0000000000","email":"","wa":"","shabbat":false,"chat":true,"site":"https://bsmevobooks.github.io/books/"},"texts":{"h1":"הזמנת ספרים\nלשנת הלימודים *תשפ״ז*","lead":"כל הספרים של הבנות – בהזמנה אחת, מהבית, בכמה לחיצות. בוחרים, מאשרים, ובספטמבר הכול מחכה בכיתה.","thanks":"תודה על הזמנתך!","arrive":"תקבלו עדכון מיד כשהספרים יגיעו","line":"מערכת הזמנת הספרים של בית הספר","closed":"מועד הזמנת הספרים הסתיים. לשאלות ניתן לפנות למזכירות בית הספר.","how":[{"i":"👧","t":"מזהים","s":"בוחרים את שם התלמידה ומאמתים בקוד שנשלח למייל"},{"i":"📚","t":"מסמנים","s":"רק הספרים של הכיתה שלה מופיעים – מסמנים וי"},{"i":"💳","t":"משלמים","s":"הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות"},{"i":"😊","t":"מקבלים","s":"נעדכן אתכם מיד כשהספרים מגיעים"}]},"grades":["א","ב","ג","ד","ה","ו","ז","ח"],"books":[{"id":"b1","t":"חומש בראשית עם פירוש רש״י","pub":"","sub":"לימודי קודש","price":48,"grades":["ב","ג","ד","ה","ו","ז","ח"],"on":true},{"id":"b2","t":"סידור תפילה לתלמידה","pub":"","sub":"לימודי קודש","price":35,"grades":["א","ב","ג"],"on":true},{"id":"b3","t":"נביא – ספר יהושע","pub":"","sub":"לימודי קודש","price":32,"grades":["ד","ה"],"on":true},{"id":"b4","t":"דינים והליכות – חוברת עבודה","pub":"","sub":"לימודי קודש","price":28,"grades":["ה","ו","ז","ח"],"on":true},{"id":"b5","t":"קריאה ראשונה – מקראה","pub":"","sub":"עברית ולשון","price":42,"grades":["א"],"on":true},{"id":"b6","t":"עברית בשמחה – חוברת עבודה","pub":"","sub":"עברית ולשון","price":38,"grades":["ב","ג","ד"],"on":true},{"id":"b7","t":"לשון והבעה","pub":"","sub":"עברית ולשון","price":44,"grades":["ה","ו","ז","ח"],"on":true},{"id":"b8","t":"חשבון לכיתה – חלק א׳","pub":"","sub":"חשבון","price":39,"grades":["א","ב","ג","ד","ה","ו"],"on":true},{"id":"b9","t":"חשבון לכיתה – חלק ב׳","pub":"","sub":"חשבון","price":39,"grades":["א","ב","ג","ד","ה","ו"],"on":true},{"id":"b10","t":"מתמטיקה – ספר לימוד","pub":"","sub":"חשבון","price":56,"grades":["ז","ח"],"on":true},{"id":"b11","t":"English Workbook","pub":"","sub":"אנגלית","price":52,"grades":["ד","ה","ו","ז","ח"],"on":true},{"id":"b12","t":"מדעים – חוברת חקר","pub":"","sub":"מדעים","price":34,"grades":["ג","ד","ה","ו"],"on":true},{"id":"b13","t":"אטלס ארץ ישראל","pub":"","sub":"כללי","price":65,"grades":["ד","ה","ו","ז","ח"],"on":true},{"id":"b14","t":"סט מחברות וכלי כתיבה","pub":"","sub":"כללי","price":25,"grades":[],"on":true}],"pay":[{"id":"hk","on":true,"ico":"🏦","name":"הוראת קבע","title":"לתשלום בהוראת קבע המעודכנת בבית הספר","sub":"הסכום ייגבה בהוראת הקבע הקיימת","after":"הסכום ייגבה בהוראת הקבע המעודכנת בבית הספר. נשלח לכם מייל כשהגבייה תתבצע.","link":""},{"id":"credit","on":true,"ico":"💳","name":"כרטיס אשראי","title":"לתשלום באשראי","sub":"תשלום מאובטח בכרטיס אשראי","after":"בשלב הבא תועברו לדף תשלום מאובטח.","link":""},{"id":"cash","on":true,"ico":"💵","name":"מזומן או צ׳ק","title":"לתשלום במזומן או בצ׳ק","sub":"מעבירים למזכירות בית הספר","after":"את התשלום מעבירים למזכירות בית הספר, במעטפה עם שם התלמידה והכיתה.","link":""}],"faq":[{"q":"עד מתי אפשר להזמין או לשנות?","a":"עד התאריך שמופיע במסך הבית. עד אז אפשר להיכנס שוב ולשנות ספרים או אמצעי תשלום."},{"q":"לא קיבלתי קוד אימות","a":"הקוד נשלח למייל שרשום בבית הספר. כדאי לחכות דקה ולבדוק גם בתיקיית הספאם. אם המספר לא מוכר למערכת – פונים למזכירות לעדכון הפרטים."},{"q":"איך משנים הזמנה?","a":"נכנסים למסך הבית ולוחצים על \"לשינוי ההזמנה או אמצעי תשלום\". אחרי אימות קצר אפשר לעדכן."},{"q":"אילו אמצעי תשלום יש?","a":"הוראת קבע המעודכנת בבית הספר, כרטיס אשראי, או מזומן / צ׳ק במזכירות."},{"q":"מתי יגיעו הספרים?","a":"נשלח לכם עדכון ברגע שהספרים יגיעו לבית הספר."}],"theme":{},"_s":"mw7tdzjd"}</script>
 
 
 
@@ -422,7 +431,7 @@ let D=JSON.parse($('#site-data').textContent);
 let PUB=JSON.stringify(D);
 const DEF={brand:'',seo:{title:'',desc:''},set:{pass:'',api:'',year:'',deadline:'',otp:'both',phone:'',email:'',wa:'',shabbat:true,chat:true,site:''},texts:{h1:'',lead:'',thanks:'תודה על הזמנתך!',arrive:'תקבלו עדכון מיד כשהספרים יגיעו',line:'',closed:'',how:[{i:'👧',t:'מזהים',s:'בוחרים את שם התלמידה ומאמתים בקוד שנשלח למייל'},{i:'📚',t:'מסמנים',s:'רק הספרים של הכיתה שלה מופיעים – מסמנים וי'},{i:'💳',t:'משלמים',s:'הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות'},{i:'😊',t:'מקבלים',s:'נעדכן אתכם מיד כשהספרים מגיעים'}]},grades:['א','ב','ג','ד','ה','ו','ז','ח'],books:[],pay:[],faq:[],theme:{}};
 function norm(d){for(const k in DEF){const v=DEF[k];if(d[k]==null)d[k]=JSON.parse(JSON.stringify(v));else if(v&&typeof v==='object'&&!Array.isArray(v))for(const j in v)if(d[k][j]==null)d[k][j]=JSON.parse(JSON.stringify(v[j]))}
- d.set.otp='email';const fx=x=>typeof x==='string'?x.replace(/(?:לוואטסאפ או למייל|בקוד לוואטסאפ או למייל)/g,m=>m.startsWith('בקוד')?'בקוד שנשלח למייל':'למייל').replace('שרשומים בבית הספר','שרשום בבית הספר'):x;(d.faq||[]).forEach(f=>{f.a=fx(f.a)});if(d.texts&&Array.isArray(d.texts.how))d.texts.how.forEach(x=>{x.s=fx(x.s)});d.books.forEach(b=>{b.id=b.id||'b'+strHash(b.t+Math.random());b.grades=b.grades||[];if(b.on==null)b.on=true});return d}
+ d.set.otp='email';const fx=x=>typeof x==='string'?x.replace(/(?:לוואטסאפ או למייל|בקוד לוואטסאפ או למייל)/g,m=>m.startsWith('בקוד')?'בקוד שנשלח למייל':'למייל').replace('שרשומים בבית הספר','שרשום בבית הספר').replace('נשלח למייל שרשום בבית הספר','נשלח למייל שהקלדתם בכניסה הראשונה'):x;(d.faq||[]).forEach(f=>{f.a=fx(f.a)});if(d.texts&&Array.isArray(d.texts.how))d.texts.how.forEach(x=>{x.s=fx(x.s)});d.books.forEach(b=>{b.id=b.id||'b'+strHash(b.t+Math.random());b.grades=b.grades||[];if(b.on==null)b.on=true});return d}
 norm(D);
 const T=()=>D.texts;
 const bookById=id=>D.books.find(b=>b.id===id);
@@ -441,17 +450,21 @@ async function api(a,p={}){
 
 /* demo mode – works with no server, sample data saved in this browser only */
 const DEMO_ST=(()=>{const L=[['רחלי כהן','ה׳1','0500000001'],['שרה כהן','ג׳2','0500000001'],['מירי כהן','א׳1','0500000001'],['חיה לוי','ה׳2','0500000002'],['אסתי לוי','ב׳1','0500000002'],['נחמי פרידמן','ד׳1','0500000003'],['טובי גולדברג','ו׳1','0500000004'],['בתיה רוזנברג','ז׳1','0500000005'],['רבקי רוזנברג','ג׳1','0500000005'],['פייגי שפירא','ח׳1','0500000006'],['שושי ברגר','א׳2','0500000007'],['חני וייס','ב׳2','0500000008'],['דבורי קליין','ד׳2','0500000009'],['ליבי הורוביץ','ו׳2','0500000010'],['מלכי אדלר','ז׳2','0500000011'],['צירי שטרן','ח׳2','0500000012'],['הדסה שטרן','ה׳1','0500000012'],['נעמי פרידמן','ב׳1','0500000003']];
- return L.map(x=>({id:'s'+strHash(x[0]+'|'+x[2]),name:x[0],cls:x[1],grade:gradeOf(x[1]),phones:[x[2]],email:'demo@example.com'}))})();
-let DEMO_CODE='',DEMO_RID='',DEMO_RP='';
+ return L.map(x=>({id:'s'+strHash(x[0]+'|'+x[2]),name:x[0],cls:x[1],grade:gradeOf(x[1]),phones:[x[2]],email:''}))})();
+let DEMO_CODE='',DEMO_RID='',DEMO_RP='',DEMO_EM='';
 async function demo(a,p){await sleep(500);
  const O=lsGet('bk-demo-ord',{}),all=lsGet('bk-demo-st',null)||DEMO_ST;
  const fam=n=>all.filter(s=>s.phones.includes(n)),pub=s=>({id:s.id,name:s.name,cls:s.cls,grade:s.grade,ph:s.phones.map(p=>p.slice(-3))}),mine=f=>Object.fromEntries(f.filter(s=>O[s.id]).map(s=>[s.id,O[s.id]]));
  const nq=x=>String(x||'').replace(/[׳״'"`]/g,'').replace(/\s+/g,' ').trim();
- if(a==='find'){const q=nq(p.q);if(q.length<2)return{ok:true,students:[]};const W=q.split(' ');return{ok:true,students:all.filter(s=>W.every(w=>nq(s.name).includes(w))).slice(0,8).map(pub)}}
+ if(a==='find'){const q=nq(p.q);if(q.length<2)return{ok:true,students:[]};const W=q.split(' ');const mk=e=>e?e.slice(0,2)+'•••@'+e.split('@')[1]:'';return{ok:true,students:all.filter(s=>W.every(w=>nq(s.name).includes(w))).slice(0,8).map(s=>({...pub(s),em:s.phones.map(x=>mk((all.find(y=>y.phones.includes(x)&&y.email)||{}).email))}))}}
+ const mk=e=>e?e.slice(0,2)+'•••@'+e.split('@')[1]:'',femail=n=>(fam(n).find(s=>s.email)||{}).email||'';
+ if(a==='check'){const n=ph(p.phone);if(!fam(n).length)return{ok:false,err:'המספר הזה לא רשום אצלנו. בודקים את המספר, או מחפשים לפי שם התלמידה.'};return{ok:true,em:mk(femail(n))}}
  if(a==='send'){let n;if(p.sid){const s=all.find(x=>x.id===p.sid);if(!s)return{ok:false,err:'התלמידה לא נמצאה'};n=s.phones[+p.pi||0]||s.phones[0];if(!n)return{ok:false,err:'לא רשום טלפון לתלמידה הזו. פונים למזכירות.'}}else n=ph(p.phone);
   if(n.length<9)return{ok:false,err:'מספר הטלפון לא תקין'};if(!fam(n).length)return{ok:false,err:'המספר הזה לא רשום אצלנו. בודקים את המספר, או מחפשים לפי שם התלמידה.'};
-  DEMO_CODE=String(100000+Math.floor(Math.random()*900000));DEMO_RID=Math.random().toString(36).slice(2);DEMO_RP=n;return{ok:true,via:'email:de•••@example.com',rid:DEMO_RID,demo:DEMO_CODE}}
- if(a==='verify'){if(!DEMO_CODE)return{ok:false,err:'תוקף הקוד פג. שולחים קוד חדש.'};if(String(p.code)!==DEMO_CODE)return{ok:false,err:'הקוד שגוי. בודקים ומנסים שוב.'};DEMO_CODE='';const n=p.rid&&p.rid===DEMO_RID?DEMO_RP:ph(p.phone),f=fam(n);return{ok:true,token:'demo.'+n,phone:n,kids:f.map(pub),orders:mine(f)}}
+  let to='';if(p.email){if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(p.email))return{ok:false,err:'כתובת המייל לא תקינה'};if(p.sid&&ph(p.full)!==n)return{ok:false,err:'המספר שהוקלד לא תואם למספר הרשום אצלנו (שמסתיים ב-'+n.slice(-3)+').'};to=p.email.toLowerCase()}else{to=femail(n);if(!to)return{ok:false,need:'email',err:'עוד לא רשום מייל למשפחה. מקלידים כתובת מייל.'}}
+  DEMO_CODE=String(100000+Math.floor(Math.random()*900000));DEMO_RID=Math.random().toString(36).slice(2);DEMO_RP=n;DEMO_EM=p.email?to:'';return{ok:true,via:'email:'+mk(to),rid:DEMO_RID,demo:DEMO_CODE}}
+ if(a==='verify'){if(!DEMO_CODE)return{ok:false,err:'תוקף הקוד פג. שולחים קוד חדש.'};if(String(p.code)!==DEMO_CODE)return{ok:false,err:'הקוד שגוי. בודקים ומנסים שוב.'};DEMO_CODE='';const n=p.rid&&p.rid===DEMO_RID?DEMO_RP:ph(p.phone);
+  if(DEMO_EM&&p.rid===DEMO_RID){const L=all.map(s=>s.phones.includes(n)?{...s,email:DEMO_EM}:s);lsSet('bk-demo-st',L);all.splice(0,all.length,...L);DEMO_EM=''}const f=fam(n);return{ok:true,token:'demo.'+n,phone:n,kids:f.map(pub),orders:mine(f)}}
  const tp=String(p.token||'').startsWith('demo.')?p.token.slice(5):'';
  if(a==='mine'){if(!tp)return{ok:false,auth:1};const f=fam(tp);return{ok:true,kids:f.map(pub),orders:mine(f)}}
  if(a==='save'){if(!tp)return{ok:false,auth:1};if(!dlInfo().open)return{ok:false,err:'מועד הזמנת הספרים הסתיים.'};
@@ -471,7 +484,7 @@ async function demo(a,p){await sleep(500);
 /* ---------- state ---------- */
 let SES=window.__BK_PV?null:lsGet('bk-ses',null);               // {token,phone,kids,orders}
 const saveSes=()=>{if(!window.__BK_PV)lsSet('bk-ses',SES)};
-const F={q:'',pi:0,rid:'',req:null,sid:'',phone:'',ch:'email',kid:'',sel:new Set(),pay:'',payOnly:false,via:'',demo:'',lastSaved:''};
+const F={q:'',pi:0,rid:'',req:null,stage:'',full:'',email:'',sid:'',phone:'',ch:'email',kid:'',sel:new Set(),pay:'',payOnly:false,via:'',demo:'',lastSaved:''};
 let STU=null,CUR='home';
 const kidById=id=>SES&&SES.kids.find(k=>k.id===id);
 const ordOf=id=>SES&&SES.orders&&SES.orders[id];
@@ -502,10 +515,10 @@ V.home=()=>{const dl=dlInfo(),has=SES&&SES.kids&&SES.kids.length&&Object.keys(SE
  <div class="hero-art">${SHELF}</div></section>
  ${(T().how||[]).filter(x=>x.t).length?`<section class="how">${T().how.filter(x=>x.t).map(x=>`<div><i>${esc(x.i)}</i><b>${esc(x.t)}</b><span>${esc(x.s)}</span></div>`).join('')}</section>`:''}`};
 
-V.id=()=>`<div class="scr-head"><h2>מי מזמינה?</h2><p>מקלידים את שם התלמידה, או את מספר הטלפון שרשום בבית הספר.<br>נשלח קוד אימות קצר למייל של המשפחה.</p></div>
+V.id=()=>`<div class="scr-head"><h2>מי מזמינה?</h2><p>מקלידים את שם התלמידה, או את מספר הטלפון שרשום בבית הספר.<br>נשלח אליכם קוד אימות קצר במייל.</p></div>
  <div class="box find-box"><label class="find-in"><span class="find-ic" aria-hidden="true">🔍</span><input id="fq" type="search" autocomplete="off" placeholder="שם התלמידה או מספר טלפון…" aria-label="שם התלמידה או מספר טלפון" value="${esc(F.q||'')}"></label>
   <div id="fres" aria-live="polite"></div><p class="err" id="iderr" role="alert"></p>
-  ${LIVE()?'':'<div class="demo">🧪 <b>מצב הדגמה</b> – עוד לא חובר שרת. לנסיון מקלידים <b>כהן</b>, או את המספר <b>050-0000001</b>. הקוד יוצג על המסך.</div>'}</div>
+  ${LIVE()?'':'<div class="demo">🧪 <b>מצב הדגמה</b> – עוד לא חובר שרת. לנסיון מקלידים <b>כהן</b>, בוחרים בת, מקלידים את המספר המלא <b>050-0000001</b> וכל כתובת מייל. הקוד יוצג על המסך.</div>'}</div>
  <button class="back" data-a="home">→ חזרה למסך הבית</button>`;
 
 V.code=()=>`<div class="otp-box box"><div style="font-size:46px">${F.via==='wa'?'💬':'✉️'}</div><h2 style="font-size:32px;margin:6px 0 8px">הקלידו את קוד האימות</h2>
@@ -569,31 +582,58 @@ function go(v,o={}){
 addEventListener('popstate',e=>{const v=e.state&&e.state.v;if(!v||$('.adm.open'))return;go(['code','done','thanks'].includes(v)?'home':v,{nohist:true})});
 
 const AFTER={};
-let FOUND=[];
+let FOUND=[],PH=null;
 const isPhoneQ=v=>/^[\d\s\-+().]+$/.test(v)&&v.replace(/\D/g,'').length>=3;
 const fullPhone=v=>{const d=ph(v);return /^0\d{8,9}$/.test(d)?d:''};
+const emOk=e=>/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(e||'').trim());
+/* the panel under a picked girl (or a typed phone): existing email → send; no email → full phone + email → confirm → send */
+function idBody(c){const P=c.phones,em=c.em||'',st=F.stage||'';
+ const masked=x=>'<b dir="ltr">•••-••••'+esc(x)+'</b>';
+ let h1='';
+ if(c.kind==='sid'&&P.length>1)h1=`<div class="fr-q">לאיזה טלפון? (שני הטלפונים הרשומים אצלנו)</div><div class="fr-phs">${P.map((x,i)=>`<label><input type="radio" name="pi" value="${i}" ${i===(F.pi||0)?'checked':''}><span>📱 ${masked(x)}</span></label>`).join('')}</div>`;
+ else if(c.kind==='sid')h1=P.length?`<div class="fr-one">📱 הטלפון הרשום אצלנו: ${masked(P[0])}</div>`:'';
+ if(c.kind==='sid'&&!P.length)return '<div class="fr-b"><div class="fr-one">לא רשום טלפון לתלמידה הזו. פונים למזכירות.</div></div>';
+ if(em&&!st)return `<div class="fr-b">${h1}<div class="fr-one">✉️ הקוד יישלח למייל שלכם: <b dir="ltr">${esc(em)}</b></div>
+  <button class="btn pri wide" data-a="${c.kind==='sid'?'send':'sendph'}" id="sendBtn">שליחת קוד אימות</button><button class="fr-link" data-a="chmail">זה לא המייל שלנו / רוצים להחליף כתובת</button></div>`;
+ if(st==='confirm')return `<div class="fr-b"><div class="cf">שולחים קוד אימות לכתובת:<div class="cf-em" dir="ltr">${esc(F.email.trim().toLowerCase())}</div>אחרי האימות הכתובת תישמר, ולשם יגיעו גם העדכונים על ההזמנה${c.name?' של <b>'+esc(c.name)+'</b>':''}.</div>
+  <label class="cf-ck"><input type="checkbox" id="fok"><span>${c.name?'אני ההורה של '+esc(c.name)+', ו':''}הכתובת הזו נכונה ושייכת לי</span></label>
+  <button class="btn pri wide" data-a="sendnew" id="sendBtn">✓ אישור ושליחת קוד</button><button class="fr-link" data-a="editmail">✏️ תיקון הכתובת</button></div>`;
+ return `<div class="fr-b">${h1}<div class="fr-first">${em?'מחליפים כתובת מייל':'כניסה ראשונה'} – כדי לוודא שאתם ההורים:</div>
+  ${c.kind==='sid'?`<label class="fl"><input id="ffull" type="tel" inputmode="tel" dir="ltr" placeholder=" " autocomplete="tel" value="${esc(F.full||'')}"><span>מספר הטלפון המלא (מסתיים ב-${esc(P[F.pi||0]||P[0])})</span></label>`:''}
+  <label class="fl"><input id="femail" type="email" inputmode="email" dir="ltr" placeholder=" " autocomplete="email" value="${esc(F.email||'')}"><span>כתובת המייל שלכם</span></label>
+  <small class="fr-note" style="margin:-4px 0 12px">לכאן יישלח קוד האימות, וגם העדכונים על ההזמנה – למשל כשהספרים מגיעים</small>
+  <button class="btn pri wide" data-a="toconfirm" id="tocBtn">המשך</button>${em?'<button class="fr-link" data-a="keepmail">ביטול – לשלוח למייל הרשום</button>':''}</div>`}
 AFTER.id=()=>{const inp=$('#fq'),R=$('#fres');let t=0,seq=0;
  const words=()=>String(F.q||'').replace(/[׳״'"]/g,'').split(/\s+/).filter(Boolean);
  const hl=s=>{let x=esc(s);words().forEach(w=>{if(w.length>=2)x=x.replace(new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'),'<mark>$&</mark>')});return x};
- const masked=x=>'<b dir="ltr">•••-••••'+esc(x)+'</b>';
- const body=s=>{const P=s.ph||[];
-  return `<div class="fr-b">${P.length>1?`<div class="fr-q">לאיזה טלפון לשלוח? (שני הטלפונים הרשומים אצלנו)</div><div class="fr-phs">${P.map((x,i)=>`<label><input type="radio" name="pi" value="${i}" ${i===(F.pi||0)?'checked':''}><span>📱 ${masked(x)}</span></label>`).join('')}</div>`:P.length?`<div class="fr-one">📱 הטלפון הרשום אצלנו: ${masked(P[0])}</div>`:'<div class="fr-one">לא רשום טלפון לתלמידה הזו. פונים למזכירות.</div>'}
-   ${P.length?'<button class="btn pri wide" data-a="send" id="sendBtn">שליחת קוד אימות</button><small class="fr-note">הקוד יישלח למייל של המשפחה שרשום בבית הספר</small>':''}</div>`};
+ const wire=()=>{$$('input[name=pi]',R).forEach(r=>r.addEventListener('change',()=>{F.pi=+r.value;F.stage='';redraw()}));
+  const fu=$('#ffull',R),fe=$('#femail',R);if(fu)fu.addEventListener('input',()=>{F.full=fu.value;fu.classList.remove('bad')});if(fe){fe.addEventListener('input',()=>{F.email=fe.value;fe.classList.remove('bad')});fe.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();toConfirm()}})}
+  if(fu&&!fu.value)fu.focus();else if(fe&&!fe.value)fe.focus()};
  const drawRes=()=>{if(!R.isConnected)return;
   if(!FOUND.length){R.innerHTML='<div class="empty">לא מצאנו תלמידה בשם הזה 🤔<br>בודקים את האיות, מנסים רק שם משפחה – או מקלידים את מספר הטלפון</div>';return}
-  R.innerHTML='<div class="fr-list">'+FOUND.map(s=>{const on=s.id===F.sid;return `<div class="fr${on?' on':''}"><button class="fr-h" data-a="pickst" data-id="${esc(s.id)}" aria-expanded="${on}"><span class="av">${esc(s.name[0]||'')}</span><span class="fr-t"><b>${hl(s.name)}</b><small>כיתה ${esc(s.cls)}</small></span><span class="fr-p">${(s.ph||[]).map(x=>'<span dir="ltr">•••'+esc(x)+'</span>').join(' ')}</span></button>${on?body(s):''}</div>`}).join('')+'</div>'+(FOUND.length>=8?'<p class="muted center" style="margin:8px 0 0">יש עוד תוצאות – מקלידים גם שם פרטי וגם שם משפחה</p>':'');
-  $$('input[name=pi]',R).forEach(r=>r.addEventListener('change',()=>{F.pi=+r.value}))};
+  R.innerHTML='<div class="fr-list">'+FOUND.map(s=>{const on=s.id===F.sid;return `<div class="fr${on?' on':''}"><button class="fr-h" data-a="pickst" data-id="${esc(s.id)}" aria-expanded="${on}"><span class="av">${esc(s.name[0]||'')}</span><span class="fr-t"><b>${hl(s.name)}</b><small>כיתה ${esc(s.cls)}</small></span><span class="fr-p">${(s.ph||[]).map(x=>'<span dir="ltr">•••'+esc(x)+'</span>').join(' ')}</span></button>${on?idBody({kind:'sid',name:s.name,phones:s.ph||[],em:(s.em||[])[F.pi||0]||''}):''}</div>`}).join('')+'</div>'+(FOUND.length>=8?'<p class="muted center" style="margin:8px 0 0">יש עוד תוצאות – מקלידים גם שם פרטי וגם שם משפחה</p>':'');wire()};
+ const drawPhone=()=>{if(!R.isConnected||!PH)return;R.innerHTML=`<div class="fr on fr-phone"><div class="fr-ph">📱 <b dir="ltr">${esc(phFmt(PH.phone))}</b></div>${idBody({kind:'phone',name:'',phones:[PH.phone.slice(-3)],em:PH.em})}</div>`;wire()};
+ const redraw=()=>PH&&isPhoneQ(F.q||'')?drawPhone():drawRes();
  const draw=()=>{const v=inp.value.trim();F.q=v;$('#iderr').textContent='';
-  if(isPhoneQ(v)){seq++;F.sid='';const d=fullPhone(v);
-   R.innerHTML=d?`<div class="fr-phone"><div>📱 <b dir="ltr">${esc(phFmt(d))}</b></div><button class="btn pri wide" data-a="sendph" id="sendBtn">שליחת קוד אימות</button><small class="fr-note">אם המספר רשום אצלנו – הקוד יישלח למייל של המשפחה</small></div>`:'<div class="empty">ממשיכים להקליד את מספר הטלפון…</div>';return}
+  if(isPhoneQ(v)){F.sid='';const d=fullPhone(v);const my=++seq;
+   if(!d){PH=null;R.innerHTML='<div class="empty">ממשיכים להקליד את מספר הטלפון…</div>';return}
+   if(PH&&PH.phone===d)return drawPhone();
+   F.stage='';R.innerHTML='<div class="empty"><span class="spin"></span> בודקים את המספר…</div>';clearTimeout(t);
+   t=setTimeout(async()=>{const r=await api('check',{phone:d});if(my!==seq)return;if(!r.ok){PH=null;R.innerHTML='<div class="empty">'+esc(r.err||'שגיאה')+'</div>';return}PH={phone:d,em:r.em||''};drawPhone()},350);return}
+  PH=null;
   if(v.replace(/[׳״'"\s]/g,'').length<2){seq++;FOUND=[];R.innerHTML=v?'<div class="empty">ממשיכים להקליד…</div>':'';return}
   const my=++seq;R.innerHTML='<div class="empty"><span class="spin"></span> מחפשים…</div>';clearTimeout(t);
-  t=setTimeout(async()=>{const r=await api('find',{q:v});if(my!==seq)return;if(!r.ok){R.innerHTML='<div class="empty">'+esc(r.err||'שגיאה בחיפוש')+'</div>';return}FOUND=r.students||[];if(FOUND.length===1&&!F.sid)F.sid=FOUND[0].id,F.pi=0;drawRes()},320)};
- AFTER._drawRes=drawRes;
+  t=setTimeout(async()=>{const r=await api('find',{q:v});if(my!==seq)return;if(!r.ok){R.innerHTML='<div class="empty">'+esc(r.err||'שגיאה בחיפוש')+'</div>';return}FOUND=r.students||[];if(FOUND.length===1&&!F.sid){F.sid=FOUND[0].id;F.pi=0;F.stage=''}drawRes()},320)};
+ AFTER._redraw=redraw;
  inp.addEventListener('input',draw);
- inp.addEventListener('keydown',e=>{if(e.key!=='Enter')return;e.preventDefault();if(fullPhone(inp.value.trim())&&isPhoneQ(inp.value.trim()))sendCode('phone');else if(F.sid&&FOUND.some(s=>s.id===F.sid))sendCode('sid')});
+ inp.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();const b=$('#sendBtn,#tocBtn',R);if(b)b.click()}});
  if(F.q){if(!isPhoneQ(F.q)&&FOUND.length)drawRes();else draw()}
- setTimeout(()=>inp.focus(),80)};
+ setTimeout(()=>{if(!$('#ffull,#femail',R))inp.focus()},80)};
+function curCtx(){if(PH&&isPhoneQ(F.q||''))return{kind:'phone',name:'',last:PH.phone.slice(-3)};const s=FOUND.find(x=>x.id===F.sid);return s?{kind:'sid',name:s.name,last:(s.ph||[])[F.pi||0]||(s.ph||[])[0]||''}:null}
+function toConfirm(){const c=curCtx(),err=t=>{$('#iderr').textContent=t};if(!c)return;
+ if(c.kind==='sid'){const d=ph(F.full);if(!/^0\d{8,9}$/.test(d)||d.slice(-3)!==c.last){const fu=$('#ffull');if(fu){fu.classList.add('bad');fu.focus()}return err(d.length<9?'מקלידים את מספר הטלפון המלא':'המספר לא תואם למספר הרשום אצלנו (שמסתיים ב-'+c.last+')')}}
+ if(!emOk(F.email)){const fe=$('#femail');if(fe){fe.classList.add('bad');fe.focus()}return err('כתובת המייל לא תקינה – בודקים שאין רווחים ושיש @')}
+ err('');F.stage='confirm';AFTER._redraw&&AFTER._redraw()}
 AFTER.code=()=>{const I=$$('#otp input');I[0].focus();
  I.forEach((inp,i)=>{inp.addEventListener('input',()=>{const v=inp.value.replace(/\D/g,'');inp.value=v.slice(-1);if(v&&i<5)I[i+1].focus();if(I.every(x=>x.value))verify()});
   inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&i>0){I[i-1].focus();I[i-1].value=''}else if(e.key==='Enter')verify()});
@@ -607,16 +647,19 @@ AFTER.done=()=>confetti();AFTER.thanks=()=>{};
 const clsSort=(a,b)=>{const ga=D.grades.indexOf(gradeOf(a)),gb=D.grades.indexOf(gradeOf(b));return (ga<0?99:ga)-(gb<0?99:gb)||String(a).localeCompare(String(b),'he',{numeric:true})};
 
 /* ---------- actions ---------- */
-/* send a code: by a picked girl (her registered phone, chosen by index) or by a typed phone; 'again' = resend the same request */
+/* send a code. how: 'sid' (picked girl, saved email) · 'phone' (typed phone, saved email) · 'new' (new email after confirm) · 'again' (resend) */
 async function sendCode(how){
  const err=t=>{const e=$('#iderr')||$('#cerr');if(e)e.textContent=t;else toast(t)};
- if(how==='sid'){if(!F.sid)return err('בוחרים קודם את התלמידה מהרשימה');F.req={sid:F.sid,pi:F.pi||0};F.phone=''}
- else if(how==='phone'){const d=fullPhone(($('#fq')||{}).value||'');if(!d)return err('נא להקליד מספר טלפון תקין');F.req={phone:d};F.phone=d}
+ const c=curCtx();
+ if(how==='sid'){if(!F.sid)return err('בוחרים קודם את התלמידה');F.req={sid:F.sid,pi:F.pi||0};F.phone=''}
+ else if(how==='phone'){if(!PH)return;F.req={phone:PH.phone};F.phone=PH.phone}
+ else if(how==='new'){if(!c)return;const ok=$('#fok');if(ok&&!ok.checked){ok.closest('label').classList.add('bad');return err('מסמנים את האישור לפני השליחה')}
+  F.req=c.kind==='sid'?{sid:F.sid,pi:F.pi||0,email:F.email.trim(),full:ph(F.full)}:{phone:PH.phone,email:F.email.trim()};F.phone=c.kind==='phone'?PH.phone:''}
  if(!F.req)return go('id');
  const b=$('#sendBtn')||$('#rsBtn');if(b){b.disabled=true;b._t=b.textContent;b.textContent='שולחים…'}
  const r=await api('send',{...F.req,ch:'email'});
  if(b&&b.isConnected){b.disabled=false;b.textContent=b._t}
- if(!r.ok)return err(r.err||'משהו השתבש. נסו שוב');
+ if(!r.ok){if(r.need==='email'&&CUR==='id'){F.stage='email';AFTER._redraw&&AFTER._redraw()}return err(r.err||'משהו השתבש. נסו שוב')}
  F.via=r.via||'email:';F.rid=r.rid||'';F.demo=r.demo||'';
  if(how==='again'&&CUR==='code'){go('code',{nohist:true,keep:true});toast('שלחנו קוד חדש ✓')}else go('code')}
 async function reauth(next){F.req={phone:SES.phone};F.phone=SES.phone;AFTER._next=next;toast('לאבטחה – שולחים קוד אימות קצר');
@@ -650,7 +693,12 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t
  if(a==='home')go('home');
  else if(a==='start')startFlow();
  else if(a==='id')go('id');
- else if(a==='pickst'){F.sid=F.sid===id?'':id;F.pi=0;AFTER._drawRes&&AFTER._drawRes();const c=$('.fr.on');if(c)c.scrollIntoView({block:'nearest',behavior:'smooth'})}
+ else if(a==='pickst'){F.sid=F.sid===id?'':id;F.pi=0;F.stage='';F.full='';$('#iderr').textContent='';AFTER._redraw&&AFTER._redraw();const c=$('.fr.on');if(c)c.scrollIntoView({block:'nearest',behavior:'smooth'})}
+ else if(a==='chmail'){F.stage='email';AFTER._redraw&&AFTER._redraw()}
+ else if(a==='keepmail'){F.stage='';$('#iderr').textContent='';AFTER._redraw&&AFTER._redraw()}
+ else if(a==='editmail'){F.stage='email';AFTER._redraw&&AFTER._redraw()}
+ else if(a==='toconfirm')toConfirm();
+ else if(a==='sendnew')sendCode('new');
  else if(a==='send')sendCode('sid');
  else if(a==='sendph')sendCode('phone');
  else if(a==='resend')sendCode('again');
@@ -713,7 +761,7 @@ function chatAsk(q,ix){chatMsg('me',esc(q));const n=' '+q+' ',has=a=>a.some(w=>n
  if(ix===0||has(['איך מזמינ','להזמין','הזמנה חדשה','רוצה להזמין']))a='זה פשוט: בוחרים את שם התלמידה, מקלידים טלפון, מאמתים בקוד, מסמנים ספרים ובוחרים אמצעי תשלום. <a href="#" data-go="start">להתחלה ←</a>';
  else if(ix===1||has(['עד מתי','תאריך','מועד','אחרון']))a=dl.date?(dl.open?`אפשר להזמין ולשנות עד <b>${dmy(dl.date)}</b>.`:'מועד ההזמנות הסתיים.'):'אין כרגע תאריך סגירה.';
  else if(ix===2||has(['תשלום','לשלם','אשראי','הוראת קבע','מזומן','צק','צ׳ק','שיק']))a='אפשר לשלם ב:<br>'+pays.map(p=>'• '+esc(p.name)).join('<br>');
- else if(ix===3||has(['קוד','לא קיבלתי','אימות','לא הגיע']))a='הקוד נשלח למייל שרשום בבית הספר. מחכים דקה ובודקים גם בספאם. אם המספר לא מוכר – צריך לעדכן אותו במזכירות.<br>'+contact();
+ else if(ix===3||has(['קוד','לא קיבלתי','אימות','לא הגיע']))a='הקוד נשלח למייל שהקלדתם בכניסה הראשונה. מחכים דקה ובודקים גם בספאם. אם המספר לא מוכר – צריך לעדכן אותו במזכירות.<br>'+contact();
  else if(ix===4||has(['לשנות','שינוי','לעדכן','לבטל']))a=dl.open?'נכנסים ל<a href="#" data-go="family">ההזמנות שלי</a>, ושם אפשר לשנות ספרים או אמצעי תשלום.':'מועד השינויים הסתיים. לשינוי – פונים למזכירות.<br>'+contact();
  else if(ix===5||has(['טלפון','לדבר','מזכירות','נציג','צור קשר','וואטסאפ']))a=contact();
  else if(has(['ספרים הגיעו','מתי יגיעו','מתי מקבלים','יגיעו']))a='נשלח לכם עדכון מיד כשהספרים יגיעו 😊';
