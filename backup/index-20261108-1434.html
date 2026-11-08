@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הזמנת ספרים | בית הספר</title>
+<meta name="description" content="מערכת הזמנת ספרים לתלמידות בית הספר – בוחרים, מאשרים ומשלמים בכמה לחיצות.">
+<meta property="og:title" content="הזמנת ספרים | בית הספר">
+<meta property="og:description" content="מערכת הזמנת ספרים לתלמידות בית הספר – בוחרים, מאשרים ומשלמים בכמה לחיצות.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#24305e">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2216%22 fill=%22%2324305e%22/%3E%3Crect x=%2216%22 y=%2214%22 width=%229%22 height=%2236%22 rx=%222%22 fill=%22%23f4a72c%22/%3E%3Crect x=%2228%22 y=%2219%22 width=%229%22 height=%2231%22 rx=%222%22 fill=%22%23e5735c%22/%3E%3Crect x=%2240%22 y=%2216%22 width=%229%22 height=%2234%22 rx=%222%22 fill=%22%23fbf6ec%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800&family=Secular+One&display=swap">
+<style>
+  :root{
+    --ink:#24305e; --ink-soft:#5b6283; --cream:#fbf6ec; --paper:#f3ead8; --card:#fff;
+    --sun:#f4a72c; --sun-deep:#d98a0b; --rose:#e5735c; --rose-deep:#b9503b; --leaf:#2f8f7b; --sky:#5a7fd8; --wood:#c9925a;
+    --fh:'Secular One',sans-serif; --fb:'Rubik',sans-serif;
+    --line:rgba(36,48,94,.12); --shadow:0 24px 50px -28px rgba(36,48,94,.45); --r:26px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--cream);color:var(--ink);font-family:var(--fb);font-size:17px;line-height:1.6;overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(900px 500px at 105% -10%,rgba(244,167,44,.18),transparent 60%),radial-gradient(700px 500px at -10% 110%,rgba(90,127,216,.12),transparent 60%)}
+  h1,h2,h3,h4{font-family:var(--fh);font-weight:400;margin:0;line-height:1.2}
+  button{font-family:inherit}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px;width:100%}
+  ::selection{background:var(--sun);color:var(--ink)}
+  :focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+  .skip{position:fixed;top:10px;right:10px;z-index:999;background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;transform:translateY(-200%);transition:transform .2s}
+  .skip:focus{transform:none}
+  .hl{color:var(--rose)}
+
+  /* top bar */
+  .top{position:sticky;top:0;z-index:40;background:rgba(251,246,236,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 22px;max-width:1120px;margin:0 auto}
+  .brand{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer;background:none;border:0;color:inherit;padding:0;text-align:right}
+  .brand-ic{width:40px;height:40px;border-radius:12px;background:var(--ink);display:flex;align-items:flex-end;justify-content:center;gap:3px;padding:0 0 8px;flex:none}
+  .brand-ic i{display:block;width:6px;border-radius:2px}
+  .brand b{font-family:var(--fh);font-weight:400;font-size:21px;display:block;line-height:1.1}
+  .brand small{display:block;font-size:13px;color:var(--ink-soft)}
+  .top-act{display:flex;gap:8px;align-items:center}
+  .pill{border:0;background:var(--ink);color:#fff;border-radius:999px;padding:10px 18px;font-weight:600;font-size:15px;cursor:pointer;transition:transform .2s,background .2s}
+  .pill:hover{transform:translateY(-2px);background:#1a2348}
+  .pill.ghost{background:rgba(36,48,94,.07);color:var(--ink)}
+  .pill.ghost:hover{background:rgba(36,48,94,.13)}
+  @media(max-width:560px){.brand small{display:none}.pill{padding:9px 14px;font-size:14px}}
+
+  /* stepper */
+  .steps{display:none;max-width:860px;margin:26px auto 0;padding:0 22px}
+  .steps.on{display:block}
+  .steps ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);position:relative}
+  .steps li{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);position:relative;text-align:center}
+  .steps li::before{content:"";position:absolute;top:14px;right:50%;width:100%;height:3px;background:var(--line);z-index:0}
+  .steps li:first-child::before{display:none}
+  .steps li i{width:30px;height:30px;border-radius:50%;background:#fff;border:3px solid var(--line);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:700;font-size:13px;position:relative;z-index:1;transition:all .3s}
+  .steps li.ok::before,.steps li.now::before{background:var(--sun)}
+  .steps li.ok i{background:var(--sun);border-color:var(--sun);color:var(--ink)}
+  .steps li.now i{background:var(--ink);border-color:var(--sun);color:#fff;box-shadow:0 0 0 5px rgba(244,167,44,.25)}
+  .steps li.now{color:var(--ink);font-weight:700}
+  @media(max-width:560px){.steps li span{display:none}.steps li.now span{display:block;position:absolute;top:36px;white-space:nowrap}.steps{margin-bottom:18px}}
+
+  main{flex:1}
+  #stage{padding:26px 0 70px}
+  #stage.in>*{animation:rise .55s cubic-bezier(.2,.7,.2,1) both}
+  #stage.in>*:nth-child(2){animation-delay:.06s}#stage.in>*:nth-child(3){animation-delay:.12s}
+  @keyframes rise{from{opacity:0;transform:translateY(18px)}}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:30px 0 10px}
+  @media(max-width:880px){.hero{grid-template-columns:1fr;gap:10px;text-align:center}.hero-art{order:-1;max-width:330px;margin:0 auto}}
+  .kicker{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14px;color:var(--ink-soft)}
+  .kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--sun)}
+  .hero h1{font-size:clamp(42px,6.4vw,74px);margin:18px 0 14px;line-height:1.05}
+  .hero .lead{font-size:20px;color:var(--ink-soft);max-width:46ch;margin:0 0 28px}
+  @media(max-width:880px){.hero .lead{margin-inline:auto}}
+  .cta{position:relative;display:inline-flex;align-items:center;gap:20px;border:0;cursor:pointer;background:var(--ink);color:#fff;border-radius:28px;padding:22px 30px 22px 22px;text-align:right;box-shadow:0 26px 50px -22px rgba(36,48,94,.8);transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s;overflow:hidden;isolation:isolate}
+  .cta::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.14) 50%,transparent 70%);transform:translateX(100%);animation:shine 3.6s ease-in-out infinite}
+  @keyframes shine{0%,60%{transform:translateX(100%)}100%{transform:translateX(-100%)}}
+  .cta:hover{transform:translateY(-4px) scale(1.01);box-shadow:0 32px 60px -22px rgba(36,48,94,.9)}
+  .cta b{display:block;font-family:var(--fh);font-weight:400;font-size:clamp(25px,3.2vw,32px);line-height:1.15}
+  .cta small{display:block;font-size:16px;color:var(--sun);font-weight:600;margin-top:2px}
+  .cta .arr{flex:none;width:56px;height:56px;border-radius:50%;background:var(--sun);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;transition:transform .3s}
+  .cta:hover .arr{transform:translateX(-6px)}
+  .cta.alt{background:var(--leaf);box-shadow:0 26px 50px -22px rgba(47,143,123,.8)}
+  .cta.alt small{color:#d7fff4}
+  .cta.alt .arr{background:#fff}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+  @media(max-width:880px){.cta-row{justify-content:center}}
+  .link-btn{background:none;border:0;cursor:pointer;color:var(--ink);font-weight:600;font-size:16px;border-bottom:2px solid var(--sun);padding:2px 0}
+  .dl{margin:22px 0 0;font-size:15.5px;color:var(--ink-soft)}
+  .dl b{color:var(--ink)}
+  .dl .cnt{display:inline-block;background:rgba(244,167,44,.2);color:#8a5600;font-weight:700;border-radius:999px;padding:2px 11px;margin-inline-start:6px}
+  .hero-art svg{width:100%;height:auto;overflow:visible}
+  .hero-art .bk{animation:pop .7s cubic-bezier(.3,1.5,.5,1) both;animation-delay:var(--d);transform-origin:50% 100%;transform-box:fill-box}
+  @keyframes pop{from{transform:scaleY(0)}}
+  .hero-art .lt{font-family:var(--fh);fill:var(--ink);opacity:.85;animation:bob 5s ease-in-out infinite;animation-delay:var(--d)}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  .how{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+  @media(max-width:880px){.how{grid-template-columns:1fr 1fr}}
+  .how div{background:#fff;border-radius:22px;padding:22px 20px;box-shadow:0 1px 0 var(--line)}
+  .how i{display:flex;width:42px;height:42px;border-radius:14px;background:var(--paper);align-items:center;justify-content:center;font-style:normal;font-size:22px;margin-bottom:10px;transform:rotate(-6deg)}
+  .how b{display:block;font-family:var(--fh);font-weight:400;font-size:18px;margin-bottom:2px}
+  .how span{font-size:14.5px;color:var(--ink-soft)}
+  .notice{background:#fff;border-radius:22px;padding:20px 22px;box-shadow:0 1px 0 var(--line);margin-top:20px;display:flex;gap:14px;align-items:flex-start;text-align:right}
+  .notice.warn{background:#fff6ea;box-shadow:inset 0 0 0 2px rgba(244,167,44,.4)}
+
+  /* screens */
+  .scr-head{text-align:center;max-width:640px;margin:0 auto 26px}
+  .scr-head h2{font-size:clamp(30px,4.2vw,42px)}
+  .scr-head p{color:var(--ink-soft);margin:10px 0 0;font-size:17.5px}
+  .box{background:var(--card);border-radius:var(--r);padding:26px;box-shadow:0 1px 0 var(--line),var(--shadow)}
+  .box h3{font-size:21px;display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .n{width:32px;height:32px;border-radius:11px;background:var(--ink);color:var(--sun);display:inline-flex;align-items:center;justify-content:center;font-family:var(--fb);font-weight:700;font-size:16px;transform:rotate(-6deg);flex:none}
+  .idgrid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;align-items:start}
+  @media(max-width:820px){.idgrid{grid-template-columns:1fr}}
+  .srch{display:flex;gap:8px;margin-bottom:12px}
+  .srch input,.srch select,.fld input,.fld select,.fld textarea{font-family:inherit;font-size:16.5px;color:var(--ink);background:var(--cream);border:2px solid transparent;border-radius:14px;padding:12px 14px;transition:border-color .2s,background .2s;width:100%}
+  .srch input:focus,.srch select:focus,.fld input:focus,.fld textarea:focus{outline:none;border-color:var(--sun);background:#fff}
+  .srch select{width:auto;flex:none}
+  .slist{height:360px;overflow:auto;border-radius:16px;background:var(--cream);padding:6px;scroll-behavior:smooth}
+  .slist .grp{position:sticky;top:-6px;background:var(--cream);font-weight:700;font-size:13px;color:var(--ink-soft);padding:8px 10px 4px;z-index:1}
+  .sit{display:flex;width:100%;align-items:center;justify-content:space-between;gap:10px;border:0;background:transparent;border-radius:12px;padding:11px 12px;font-size:16.5px;cursor:pointer;text-align:right;color:var(--ink);transition:background .15s}
+  .sit:hover{background:#fff}
+  .sit small{color:var(--ink-soft);font-size:13.5px}
+  .sit.on{background:var(--ink);color:#fff}
+  .sit.on small{color:var(--sun)}
+  .sit.on::after{content:"✓";font-weight:800;color:var(--sun)}
+  .sit mark{background:rgba(244,167,44,.4);color:inherit;border-radius:3px}
+  .empty{text-align:center;color:var(--ink-soft);padding:30px 10px;font-size:15px}
+  .picked{display:flex;align-items:center;gap:12px;background:var(--paper);border-radius:16px;padding:14px 16px;margin-bottom:16px;min-height:62px;font-size:15.5px;color:var(--ink-soft)}
+  .picked.ok{background:#eef7f4;color:var(--ink)}
+  .picked .av{flex:none;width:36px;height:36px;border-radius:12px;background:var(--leaf);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .picked b{font-size:17px}
+  .phh{margin-top:4px;font-size:14.5px;color:var(--ink)}
+  .phh b{font-size:15.5px;letter-spacing:.04em;background:#fff;border-radius:8px;padding:1px 7px;white-space:nowrap}
+  .fl{position:relative;display:block;margin-bottom:14px}
+  .fl input{width:100%;font-family:inherit;font-size:20px;letter-spacing:.04em;color:var(--ink);background:var(--cream);border:2px solid transparent;border-radius:16px;padding:26px 16px 9px;transition:border-color .2s,background .2s;text-align:right}
+  .fl span{position:absolute;right:17px;top:19px;font-size:16px;color:var(--ink-soft);pointer-events:none;transition:all .18s;letter-spacing:0}
+  .fl input:focus{outline:none;border-color:var(--sun);background:#fff}
+  .fl input:focus+span,.fl input:not(:placeholder-shown)+span{top:7px;font-size:12.5px;font-weight:700;color:var(--sun-deep)}
+  .bad{border-color:var(--rose)!important;background:#fff5f2!important}
+  .seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+  .seg label{cursor:pointer;position:relative}
+  .seg input{position:absolute;opacity:0}
+  .seg span{display:flex;align-items:center;justify-content:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:11px;font-weight:600;font-size:15px;transition:all .2s;background:#fff}
+  .seg input:checked+span{border-color:var(--sun);background:#fff8ea}
+  .seg input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
+  .seg svg{width:20px;height:20px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;border-radius:999px;padding:15px 28px;font-weight:700;font-size:17px;transition:transform .2s,box-shadow .2s,background .2s;text-decoration:none}
+  .btn:disabled{opacity:.6;cursor:wait;transform:none!important}
+  .btn.pri{background:var(--ink);color:#fff;box-shadow:0 14px 28px -14px rgba(36,48,94,.8)}
+  .btn.pri:hover{transform:translateY(-2px);background:#1a2348}
+  .btn.sun{background:var(--sun);color:var(--ink);box-shadow:0 14px 28px -14px rgba(217,138,11,.9)}
+  .btn.sun:hover{transform:translateY(-2px)}
+  .btn.soft{background:rgba(36,48,94,.07);color:var(--ink)}
+  .btn.soft:hover{background:rgba(36,48,94,.13)}
+  .btn.leaf{background:var(--leaf);color:#fff}
+  .wide{width:100%}
+  .err{color:var(--rose-deep);font-weight:600;font-size:15px;min-height:0;margin:10px 0 0}
+  .err:empty{display:none}
+  .demo{margin-top:16px;background:#f0f4ff;border-radius:14px;padding:12px 14px;font-size:14px;color:#33427a;line-height:1.55}
+  .demo b{direction:ltr;unicode-bidi:embed}
+  .back{display:inline-flex;align-items:center;gap:6px;margin-top:22px;background:none;border:0;cursor:pointer;color:var(--ink-soft);font-weight:600;font-size:15.5px;padding:6px 2px}
+  .back:hover{color:var(--ink)}
+  .center{text-align:center}
+
+  /* find (identification) */
+  .find-box{max-width:660px;margin:0 auto}
+  .find-in{position:relative;display:block}
+  .find-in input{width:100%;font-family:inherit;font-size:20px;color:var(--ink);background:var(--cream);border:2px solid transparent;border-radius:18px;padding:17px 52px 17px 18px;transition:border-color .2s,background .2s}
+  .find-in input:focus{outline:none;border-color:var(--sun);background:#fff}
+  .find-ic{position:absolute;right:18px;top:50%;transform:translateY(-50%);font-size:20px;pointer-events:none}
+  #fres:not(:empty){margin-top:14px}
+  .fr-list{display:grid;gap:8px}
+  .fr{border-radius:18px;background:var(--cream);overflow:hidden;transition:box-shadow .2s,background .2s}
+  .fr.on{background:#fff;box-shadow:0 0 0 2px var(--sun)}
+  .fr-h{display:flex;align-items:center;gap:12px;width:100%;border:0;background:none;cursor:pointer;text-align:right;padding:12px 14px;color:var(--ink);font-family:inherit}
+  .fr-h:hover{background:rgba(255,255,255,.7)}
+  .fr-h .av{flex:none;width:40px;height:40px;border-radius:13px;background:var(--leaf);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:19px}
+  .fr-t{flex:1;min-width:0}.fr-t b{display:block;font-size:17.5px;font-weight:600}.fr-t small{color:var(--ink-soft);font-size:14px}
+  .fr-t mark{background:rgba(244,167,44,.4);color:inherit;border-radius:3px}
+  .fr-p{flex:none;font-size:14px;color:var(--ink-soft);letter-spacing:.04em;display:flex;gap:8px}
+  .fr-b{padding:4px 16px 16px}
+  .fr-one{font-size:16px;margin:2px 0 12px}
+  .fr-one b,.fr-phs b{font-size:17px;letter-spacing:.05em;background:var(--cream);border-radius:8px;padding:2px 8px;white-space:nowrap}
+  .fr-q{font-weight:600;font-size:15px;margin-bottom:8px}
+  .fr-phs{display:grid;gap:8px;margin-bottom:12px}
+  .fr-phs label{cursor:pointer}.fr-phs input{position:absolute;opacity:0}
+  .fr-phs span{display:flex;align-items:center;gap:8px;border:2px solid var(--line);border-radius:14px;padding:10px 14px;transition:all .2s}
+  .fr-phs input:checked+span{border-color:var(--sun);background:#fff8ea}
+  .fr-phs input:focus-visible+span{outline:3px solid var(--sun);outline-offset:2px}
+  .fr-note{display:block;text-align:center;color:var(--ink-soft);font-size:13.5px;margin-top:8px}
+  .fr-phone{background:var(--cream);border-radius:18px;padding:16px;display:grid;gap:12px;text-align:center}
+  .fr-phone b{font-size:22px;letter-spacing:.05em}
+  /* otp */
+  .otp-box{max-width:520px;margin:0 auto;text-align:center}
+  .otp{display:flex;gap:10px;justify-content:center;direction:ltr;margin:6px 0 18px}
+  .otp input{width:54px;height:66px;border-radius:16px;border:2px solid var(--line);background:#fff;text-align:center;font-size:30px;font-weight:700;color:var(--ink);font-family:var(--fb);transition:border-color .2s,transform .2s}
+  .otp input:focus{outline:none;border-color:var(--sun);transform:translateY(-2px)}
+  .otp.shake{animation:shake .4s}
+  @keyframes shake{25%{transform:translateX(-8px)}50%{transform:translateX(8px)}75%{transform:translateX(-4px)}}
+  @media(max-width:420px){.otp{gap:6px}.otp input{width:44px;height:56px;font-size:24px}}
+  .resend{font-size:15px;color:var(--ink-soft);margin-top:14px}
+  .resend button{background:none;border:0;color:var(--ink);font-weight:700;cursor:pointer;text-decoration:underline;font-size:15px}
+  .resend button:disabled{color:var(--ink-soft);text-decoration:none;cursor:default}
+
+  /* kids */
+  .kids{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;max-width:820px;margin:0 auto}
+  .kid{position:relative;border:0;cursor:pointer;text-align:right;background:#fff;border-radius:24px;padding:22px;box-shadow:0 1px 0 var(--line),var(--shadow);transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s;color:var(--ink)}
+  .kid:hover{transform:translateY(-5px)}
+  .kid.pre{box-shadow:0 0 0 3px var(--sun),var(--shadow)}
+  .kid .av{width:50px;height:50px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-family:var(--fh);font-size:24px;color:#fff;margin-bottom:12px;transform:rotate(-6deg)}
+  .kid b{display:block;font-family:var(--fh);font-weight:400;font-size:22px}
+  .kid small{display:block;color:var(--ink-soft);font-size:15px}
+  .tag{display:inline-block;margin-top:12px;font-size:13.5px;font-weight:700;border-radius:999px;padding:4px 12px}
+  .tag.ok{background:#e3f4ee;color:#1d6b5a}
+  .tag.no{background:#fff1dc;color:#8a5600}
+  .tag.cx{background:#fde4df;color:var(--rose-deep)}
+
+  /* books */
+  .bk-head{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+  .bk-head h2{font-size:clamp(28px,4vw,38px)}
+  .bk-head p{margin:4px 0 0;color:var(--ink-soft)}
+  .bk-tools{display:flex;gap:8px}
+  .sub-t{font-weight:700;font-size:14px;color:var(--ink-soft);margin:22px 4px 10px;display:flex;align-items:center;gap:10px}
+  .sub-t::after{content:"";flex:1;height:2px;background:var(--line);border-radius:2px}
+  .books{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+  .bk{position:relative;display:flex;align-items:center;gap:14px;background:#fff;border-radius:20px;padding:14px 16px;cursor:pointer;box-shadow:0 1px 0 var(--line);border:2px solid transparent;transition:border-color .2s,transform .2s,box-shadow .2s;user-select:none}
+  .bk:hover{transform:translateY(-2px);box-shadow:0 1px 0 var(--line),0 16px 30px -22px rgba(36,48,94,.5)}
+  .bk input{position:absolute;opacity:0;pointer-events:none}
+  .bk .spine{flex:none;width:38px;height:52px;border-radius:5px 8px 8px 5px;background:var(--c);position:relative;box-shadow:inset 5px 0 0 rgba(0,0,0,.12)}
+  .bk .spine::after{content:"";position:absolute;left:9px;right:6px;top:10px;height:4px;background:rgba(255,255,255,.5);border-radius:2px;box-shadow:0 26px 0 rgba(255,255,255,.5)}
+  .bk .tx{flex:1;min-width:0}
+  .bk .tx b{display:block;font-size:16.5px;line-height:1.35}
+  .bk .tx small{color:var(--ink-soft);font-size:13.5px}
+  .bk .pr{font-family:var(--fh);font-size:19px;white-space:nowrap}
+  .bk .ck{flex:none;width:30px;height:30px;border-radius:10px;border:2.5px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all .25s cubic-bezier(.3,1.6,.5,1);color:transparent;font-weight:900}
+  .bk:has(input:checked){border-color:var(--sun);background:#fffaf0}
+  .bk:has(input:checked) .ck{background:var(--sun);border-color:var(--sun);color:var(--ink);transform:rotate(-8deg) scale(1.08)}
+  .bk:has(input:focus-visible){outline:3px solid var(--sun);outline-offset:2px}
+  .sbar{position:sticky;bottom:14px;z-index:20;margin-top:24px;display:flex;align-items:center;justify-content:space-between;gap:14px;background:var(--ink);color:#fff;border-radius:22px;padding:12px 12px 12px 22px;box-shadow:0 24px 50px -20px rgba(36,48,94,.85)}
+  .sbar .sm{font-size:15px;color:rgba(255,255,255,.75)}
+  .sbar .sm b{color:var(--sun);font-family:var(--fh);font-weight:400;font-size:24px;margin-inline-start:6px}
+  @media(max-width:520px){.sbar{flex-direction:column;align-items:stretch;padding:12px;text-align:center}}
+
+  /* review */
+  .rev{max-width:640px;margin:0 auto}
+  .rev ul{list-style:none;margin:0;padding:0}
+  .rev li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px dashed var(--line);font-size:16.5px}
+  .rev li span:first-child::before{content:"📘 "}
+  .rev .tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:16px;font-weight:700;font-size:18px}
+  .rev .tot b{font-family:var(--fh);font-weight:400;font-size:34px;color:var(--rose)}
+  .who{display:flex;align-items:center;gap:12px;background:var(--paper);border-radius:16px;padding:12px 14px;margin-bottom:10px}
+  .who .av{width:40px;height:40px;border-radius:13px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fh);font-size:20px}
+  .act{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+
+  /* pay */
+  .pays{display:grid;gap:14px;max-width:720px;margin:0 auto}
+  .pay{position:relative;display:flex;align-items:center;gap:18px;background:#fff;border-radius:24px;padding:20px 22px;cursor:pointer;border:3px solid transparent;box-shadow:0 1px 0 var(--line),var(--shadow);transition:transform .2s,border-color .2s}
+  .pay:hover{transform:translateY(-3px)}
+  .pay input{position:absolute;opacity:0}
+  .pay .ic{flex:none;width:60px;height:60px;border-radius:18px;background:var(--paper);display:flex;align-items:center;justify-content:center;font-size:30px;transition:background .2s,transform .3s}
+  .pay b{display:block;font-family:var(--fh);font-weight:400;font-size:21px;line-height:1.3}
+  .pay small{display:block;color:var(--ink-soft);font-size:15px}
+  .pay .go{margin-inline-start:auto;flex:none;font-weight:700;color:var(--sun-deep);font-size:15px;white-space:nowrap}
+  .pay:has(input:checked){border-color:var(--sun);background:#fffaf0}
+  .pay:has(input:checked) .ic{background:var(--sun);transform:rotate(-8deg)}
+  .pay:has(input:checked) .go{color:var(--leaf)}
+  .pay:has(input:focus-visible){outline:3px solid var(--ink);outline-offset:3px}
+  @media(max-width:520px){.pay{flex-wrap:wrap}.pay .go{margin:0;width:100%}}
+  .pay-sum{text-align:center;margin:0 0 20px;color:var(--ink-soft)}
+  .pay-sum b{font-family:var(--fh);font-weight:400;color:var(--ink);font-size:24px}
+
+  /* done */
+  .done{max-width:600px;margin:0 auto;text-align:center}
+  .smile{width:120px;height:120px;margin:0 auto 18px;animation:smile .8s cubic-bezier(.3,1.6,.5,1)}
+  @keyframes smile{from{transform:scale(0) rotate(-30deg)}}
+  .done h2{font-size:clamp(32px,5vw,46px);margin-bottom:8px}
+  .done p{font-size:19px;color:var(--ink-soft);margin:6px 0}
+  .sis{margin-top:26px;background:#fff;border-radius:26px;padding:26px;box-shadow:0 0 0 3px rgba(244,167,44,.35),var(--shadow)}
+  .sis h3{font-size:24px;margin-bottom:16px}
+  .sis .act{margin-top:12px}
+  .after{background:var(--paper);border-radius:16px;padding:14px 16px;margin:18px 0 0;font-size:16px;color:var(--ink);text-align:right}
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:300;overflow:hidden}
+  .confetti i{position:absolute;top:-20px;width:12px;height:18px;border-radius:3px;animation:fall linear forwards}
+  @keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+  /* family */
+  .fam{max-width:860px;margin:0 auto}
+  .fcard{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;background:#fff;border-radius:24px;padding:20px 22px;box-shadow:0 1px 0 var(--line),var(--shadow);margin-bottom:14px}
+  @media(max-width:640px){.fcard{grid-template-columns:auto 1fr}.fcard .fb{grid-column:1/-1}}
+  .fcard .av{width:52px;height:52px;border-radius:17px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--fh);font-size:24px;transform:rotate(-6deg)}
+  .fcard b{font-family:var(--fh);font-weight:400;font-size:22px}
+  .fcard .meta{font-size:14.5px;color:var(--ink-soft)}
+  .fcard .meta em{font-style:normal;color:var(--ink);font-weight:600}
+  .fb{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .fb .btn{padding:11px 18px;font-size:15px}
+
+  /* toast */
+  #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,30px);opacity:0;z-index:2000;background:var(--ink);color:#fff;border-radius:16px;padding:13px 20px;font-weight:600;box-shadow:0 20px 40px -14px rgba(0,0,0,.5);transition:all .3s;pointer-events:none;max-width:calc(100vw - 30px);text-align:center}
+  #toast.on{opacity:1;transform:translate(-50%,0)}
+
+  /* footer */
+  footer{background:var(--ink);color:#fff;padding:34px 0 26px;margin-top:20px}
+  .ft{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .ft b{font-family:var(--fh);font-weight:400;font-size:22px}
+  .ft p{margin:4px 0 0;color:rgba(255,255,255,.7);font-size:14.5px}
+  .ft-c{display:flex;gap:16px;flex-wrap:wrap}
+  .ft-c a{text-decoration:none;color:rgba(255,255,255,.85);font-size:15px}
+  .ft-c a:hover{color:var(--sun)}
+  .ft-b{margin-top:22px;padding-top:14px;border-top:1px solid rgba(255,255,255,.12);display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.55)}
+  .ft-b a{color:inherit;text-decoration:none}
+
+  /* chat */
+  #chat{position:fixed;z-index:60;bottom:20px;left:20px}
+  .ch-fab{width:60px;height:60px;border-radius:50%;border:0;cursor:pointer;background:var(--sun);color:var(--ink);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 30px -10px rgba(217,138,11,.9);transition:transform .2s}
+  .ch-fab:hover{transform:scale(1.07) rotate(-6deg)}
+  .ch-fab svg{width:28px;height:28px}
+  .ch-panel{position:absolute;bottom:74px;left:0;width:min(370px,calc(100vw - 32px));height:min(540px,calc(100vh - 130px));background:var(--cream);border-radius:24px;box-shadow:0 30px 60px -18px rgba(36,48,94,.55),0 0 0 1px var(--line);display:flex;flex-direction:column;overflow:hidden;opacity:0;transform:translateY(14px) scale(.97);transform-origin:bottom left;pointer-events:none;transition:opacity .2s,transform .25s cubic-bezier(.2,.8,.2,1)}
+  #chat.open .ch-panel{opacity:1;transform:none;pointer-events:auto}
+  .ch-head{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--ink);color:#fff}
+  .ch-head b{flex:1;font-family:var(--fh);font-weight:400;font-size:18px}
+  .ch-head .av{width:32px;height:32px;border-radius:11px;background:var(--sun);display:flex;align-items:center;justify-content:center;font-size:17px;transform:rotate(-6deg)}
+  .ch-x{background:none;border:0;color:#fff;font-size:16px;cursor:pointer;width:32px;height:32px;border-radius:50%}
+  .ch-x:hover{background:rgba(255,255,255,.12)}
+  .ch-body{flex:1;overflow:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .ch-m{max-width:88%;padding:10px 13px;border-radius:16px;font-size:15px;line-height:1.5;animation:chin .22s ease}
+  @keyframes chin{from{opacity:0;transform:translateY(6px)}}
+  .ch-m.bot{background:#fff;align-self:flex-start;border-bottom-right-radius:5px;box-shadow:0 1px 0 var(--line)}
+  .ch-m.me{background:var(--sun);align-self:flex-end;border-bottom-left-radius:5px;font-weight:600}
+  .ch-m a{font-weight:700}
+  .ch-q{display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;border-top:1px solid var(--line);max-height:118px;overflow:auto}
+  .ch-q button{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--ink)}
+  .ch-q button:hover{border-color:var(--sun);background:#fff8ea}
+  .ch-in{display:flex;gap:8px;padding:10px 12px;border-top:1px solid var(--line);background:#fff}
+  .ch-in input{flex:1;border:0;background:var(--cream);border-radius:12px;padding:10px 12px;font-family:inherit;font-size:15px;min-width:0}
+  .ch-in input:focus{outline:2px solid var(--sun)}
+  .ch-in button{width:44px;border:0;border-radius:12px;background:var(--ink);color:var(--sun);cursor:pointer;font-size:18px}
+  body.has-sbar #chat{bottom:96px}
+
+  /* shabbat */
+  #shab{position:fixed;inset:0;z-index:900;background:var(--ink);color:#fff;display:none;align-items:center;justify-content:center;text-align:center;padding:24px}
+  #shab.on{display:flex}
+  #shab::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 38%,rgba(244,167,44,.22),transparent 55%)}
+  .shc{position:relative;max-width:520px}
+  .candles{display:flex;gap:18px;justify-content:center;align-items:flex-end;height:80px;margin-bottom:24px}
+  .candles i{position:relative;width:16px;height:48px;background:#fbf6ec;border-radius:4px}
+  .candles i::before{content:"";position:absolute;bottom:100%;left:50%;width:18px;height:28px;margin-left:-9px;background:var(--sun);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;box-shadow:0 0 34px 10px rgba(244,167,44,.35);animation:fl 1.6s ease-in-out infinite alternate;transform-origin:50% 100%}
+  .candles i:nth-child(2)::before{animation-delay:-.7s}
+  @keyframes fl{to{transform:scale(.88,1.08) rotate(3deg)}}
+  .shc h2{font-size:clamp(40px,8vw,62px);margin-bottom:12px}
+  .shc p{font-size:19px;opacity:.85}
+
+  
+  @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#stage">דילוג לתוכן</a>
+
+<header class="top">
+  <div class="top-in">
+    <button class="brand" data-a="home" aria-label="למסך הבית">
+      <span class="brand-ic" aria-hidden="true"><i style="height:22px;background:var(--sun)"></i><i style="height:16px;background:var(--rose)"></i><i style="height:19px;background:#fbf6ec"></i></span>
+      <span><b id="b-name"></b><small id="b-sub"></small></span>
+    </button>
+    <div class="top-act" id="topAct"></div>
+  </div>
+</header>
+
+<nav class="steps" id="steps" aria-label="שלבי ההזמנה"><ol>
+  <li><i>1</i><span>זיהוי</span></li><li><i>2</i><span>אימות</span></li><li><i>3</i><span>בחירת ספרים</span></li><li><i>4</i><span>אישור</span></li><li><i>5</i><span>תשלום</span></li><li><i>6</i><span>סיום</span></li>
+</ol></nav>
+
+<main><div class="wrap" id="stage" tabindex="-1" aria-live="polite"></div></main>
+
+<footer><div class="wrap">
+  <div class="ft"><div><b id="f-name"></b><p id="f-line"></p></div><div class="ft-c" id="f-con"></div></div>
+  <div class="ft-b"><span id="f-copy"></span></div>
+</div></footer>
+
+<div id="chat"></div>
+<div id="shab" role="dialog" aria-modal="true"></div>
+<div id="toast" role="status"></div>
+
+<script id="site-data" type="application/json">{"_v":1794121547092,"brand":"בית הספר לבנות נטעים","seo":{"title":"הזמנת ספרים | בית הספר","desc":"מערכת הזמנת ספרים לתלמידות בית הספר – בוחרים, מאשרים ומשלמים בכמה לחיצות."},"set":{"pass":"p2$836d0cdd09d664089ebb8e4922f9fa4a$05913072f5d3d9df4bd9ca34d32f48930d9d2aa8e586ba50bd99a30088a5bd5c","api":"https://script.google.com/macros/s/AKfycbx3nUlVjamv7sasnLwsyEsF1fkH_3vIsQI8mtAyFMRJlVEFnylslbvvS9xIuRAjBl0m/exec","year":"תשפ״ז","deadline":"2026-12-31","otp":"email","phone":"0000000000","email":"","wa":"","shabbat":false,"chat":true,"site":"https://bsmevobooks.github.io/books/"},"texts":{"h1":"הזמנת ספרים\nלשנת הלימודים *תשפ״ז*","lead":"כל הספרים של הבנות – בהזמנה אחת, מהבית, בכמה לחיצות. בוחרים, מאשרים, ובספטמבר הכול מחכה בכיתה.","thanks":"תודה על הזמנתך!","arrive":"תקבלו עדכון מיד כשהספרים יגיעו","line":"מערכת הזמנת הספרים של בית הספר","closed":"מועד הזמנת הספרים הסתיים. לשאלות ניתן לפנות למזכירות בית הספר.","how":[{"i":"👧","t":"מזהים","s":"בוחרים את שם התלמידה ומאמתים בקוד שנשלח למייל"},{"i":"📚","t":"מסמנים","s":"רק הספרים של הכיתה שלה מופיעים – מסמנים וי"},{"i":"💳","t":"משלמים","s":"הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות"},{"i":"😊","t":"מקבלים","s":"נעדכן אתכם מיד כשהספרים מגיעים"}]},"grades":["א","ב","ג","ד","ה","ו","ז","ח"],"books":[{"id":"b1","t":"חומש בראשית עם פירוש רש״י","pub":"","sub":"לימודי קודש","price":48,"grades":["ב","ג","ד","ה","ו","ז","ח"],"on":true},{"id":"b2","t":"סידור תפילה לתלמידה","pub":"","sub":"לימודי קודש","price":35,"grades":["א","ב","ג"],"on":true},{"id":"b3","t":"נביא – ספר יהושע","pub":"","sub":"לימודי קודש","price":32,"grades":["ד","ה"],"on":true},{"id":"b4","t":"דינים והליכות – חוברת עבודה","pub":"","sub":"לימודי קודש","price":28,"grades":["ה","ו","ז","ח"],"on":true},{"id":"b5","t":"קריאה ראשונה – מקראה","pub":"","sub":"עברית ולשון","price":42,"grades":["א"],"on":true},{"id":"b6","t":"עברית בשמחה – חוברת עבודה","pub":"","sub":"עברית ולשון","price":38,"grades":["ב","ג","ד"],"on":true},{"id":"b7","t":"לשון והבעה","pub":"","sub":"עברית ולשון","price":44,"grades":["ה","ו","ז","ח"],"on":true},{"id":"b8","t":"חשבון לכיתה – חלק א׳","pub":"","sub":"חשבון","price":39,"grades":["א","ב","ג","ד","ה","ו"],"on":true},{"id":"b9","t":"חשבון לכיתה – חלק ב׳","pub":"","sub":"חשבון","price":39,"grades":["א","ב","ג","ד","ה","ו"],"on":true},{"id":"b10","t":"מתמטיקה – ספר לימוד","pub":"","sub":"חשבון","price":56,"grades":["ז","ח"],"on":true},{"id":"b11","t":"English Workbook","pub":"","sub":"אנגלית","price":52,"grades":["ד","ה","ו","ז","ח"],"on":true},{"id":"b12","t":"מדעים – חוברת חקר","pub":"","sub":"מדעים","price":34,"grades":["ג","ד","ה","ו"],"on":true},{"id":"b13","t":"אטלס ארץ ישראל","pub":"","sub":"כללי","price":65,"grades":["ד","ה","ו","ז","ח"],"on":true},{"id":"b14","t":"סט מחברות וכלי כתיבה","pub":"","sub":"כללי","price":25,"grades":[],"on":true}],"pay":[{"id":"hk","on":true,"ico":"🏦","name":"הוראת קבע","title":"לתשלום בהוראת קבע המעודכנת בבית הספר","sub":"הסכום ייגבה בהוראת הקבע הקיימת","after":"הסכום ייגבה בהוראת הקבע המעודכנת בבית הספר. נשלח לכם מייל כשהגבייה תתבצע.","link":""},{"id":"credit","on":true,"ico":"💳","name":"כרטיס אשראי","title":"לתשלום באשראי","sub":"תשלום מאובטח בכרטיס אשראי","after":"בשלב הבא תועברו לדף תשלום מאובטח.","link":""},{"id":"cash","on":true,"ico":"💵","name":"מזומן או צ׳ק","title":"לתשלום במזומן או בצ׳ק","sub":"מעבירים למזכירות בית הספר","after":"את התשלום מעבירים למזכירות בית הספר, במעטפה עם שם התלמידה והכיתה.","link":""}],"faq":[{"q":"עד מתי אפשר להזמין או לשנות?","a":"עד התאריך שמופיע במסך הבית. עד אז אפשר להיכנס שוב ולשנות ספרים או אמצעי תשלום."},{"q":"לא קיבלתי קוד אימות","a":"הקוד נשלח למייל שרשום בבית הספר. כדאי לחכות דקה ולבדוק גם בתיקיית הספאם. אם המספר לא מוכר למערכת – פונים למזכירות לעדכון הפרטים."},{"q":"איך משנים הזמנה?","a":"נכנסים למסך הבית ולוחצים על \"לשינוי ההזמנה או אמצעי תשלום\". אחרי אימות קצר אפשר לעדכן."},{"q":"אילו אמצעי תשלום יש?","a":"הוראת קבע המעודכנת בבית הספר, כרטיס אשראי, או מזומן / צ׳ק במזכירות."},{"q":"מתי יגיעו הספרים?","a":"נשלח לכם עדכון ברגע שהספרים יגיעו לבית הספר."}],"theme":{},"_s":"mw7hn9lg"}</script>
+
+
+
+<script>
+(function(){
+'use strict';
+const SRC='<!DOCTYPE html>\n'+document.documentElement.outerHTML;
+const $=(s,r=document)=>r.querySelector(s),$$=(s,r=document)=>[...r.querySelectorAll(s)];
+const h=(t,a={},...c)=>{const e=document.createElement(t);let v;for(const k in a){const x=a[k];if(k==='value')v=x;else if(k.slice(0,2)==='on')e[k]=x;else if(x===true)e.setAttribute(k,'');else if(x!==false&&x!=null)e.setAttribute(k,x)}c.flat(9).forEach(x=>x!=null&&x!==false&&e.append(x.nodeType?x:String(x)));if(v!=null)e.value=v;return e};
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=s=>esc(s).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<span class="hl">$1</span>').replace(/\n/g,'<br>');
+const pad=n=>String(n).padStart(2,'0');
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+const num=v=>{const n=parseFloat(v);return isFinite(n)?n:0};
+const ils=n=>'₪'+(Math.round(num(n)*100)/100).toLocaleString('he-IL');
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const ph=s=>{let d=String(s??'').replace(/\D/g,'');if(d.startsWith('972'))d='0'+d.slice(3);if(d.length===9&&d[0]==='5')d='0'+d;return d};
+const phFmt=p=>p&&p.length===10?p.slice(0,3)+'-'+p.slice(3):p||'';
+const phMask=p=>p&&p.length>=10?p.slice(0,3)+'-•••-'+p.slice(-4):p||'';
+const gradeOf=c=>{const m=String(c||'').replace(/[׳״'"`]/g,'').match(/[א-ת]{1,2}/);return m?m[0]:''};
+const dmy=s=>{const m=/^(\d{4})-(\d\d)-(\d\d)$/.exec(s||'');return m?(+m[3])+'.'+(+m[2])+'.'+m[1]:''};
+const strHash=s=>{let a=0x811c9dc5,b=5381;for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);a=Math.imul(a^c,16777619);b=(Math.imul(b,33)^c)|0}return (a>>>0).toString(36)+(b>>>0).toString(36).slice(0,3)};
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch{return d}};
+const lsSet=(k,v)=>{try{v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch{}};
+const COLORS=['var(--rose)','var(--sky)','var(--leaf)','var(--sun-deep)','#8c5bd1','#d4568a'];
+const kidColor=i=>COLORS[i%COLORS.length];
+const BKC=['#e5735c','#5a7fd8','#2f8f7b','#f4a72c','#8c5bd1','#24305e','#d4568a','#c9925a'];
+
+/* ---------- data ---------- */
+let D=JSON.parse($('#site-data').textContent);
+let PUB=JSON.stringify(D);
+const DEF={brand:'',seo:{title:'',desc:''},set:{pass:'',api:'',year:'',deadline:'',otp:'both',phone:'',email:'',wa:'',shabbat:true,chat:true,site:''},texts:{h1:'',lead:'',thanks:'תודה על הזמנתך!',arrive:'תקבלו עדכון מיד כשהספרים יגיעו',line:'',closed:'',how:[{i:'👧',t:'מזהים',s:'בוחרים את שם התלמידה ומאמתים בקוד שנשלח למייל'},{i:'📚',t:'מסמנים',s:'רק הספרים של הכיתה שלה מופיעים – מסמנים וי'},{i:'💳',t:'משלמים',s:'הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות'},{i:'😊',t:'מקבלים',s:'נעדכן אתכם מיד כשהספרים מגיעים'}]},grades:['א','ב','ג','ד','ה','ו','ז','ח'],books:[],pay:[],faq:[],theme:{}};
+function norm(d){for(const k in DEF){const v=DEF[k];if(d[k]==null)d[k]=JSON.parse(JSON.stringify(v));else if(v&&typeof v==='object'&&!Array.isArray(v))for(const j in v)if(d[k][j]==null)d[k][j]=JSON.parse(JSON.stringify(v[j]))}
+ d.set.otp='email';const fx=x=>typeof x==='string'?x.replace(/(?:לוואטסאפ או למייל|בקוד לוואטסאפ או למייל)/g,m=>m.startsWith('בקוד')?'בקוד שנשלח למייל':'למייל').replace('שרשומים בבית הספר','שרשום בבית הספר'):x;(d.faq||[]).forEach(f=>{f.a=fx(f.a)});if(d.texts&&Array.isArray(d.texts.how))d.texts.how.forEach(x=>{x.s=fx(x.s)});d.books.forEach(b=>{b.id=b.id||'b'+strHash(b.t+Math.random());b.grades=b.grades||[];if(b.on==null)b.on=true});return d}
+norm(D);
+const T=()=>D.texts;
+const bookById=id=>D.books.find(b=>b.id===id);
+const bookFor=(b,g)=>b&&b.on!==false&&(!b.grades.length||b.grades.includes(g));
+const sumBooks=ids=>ids.reduce((a,id)=>a+num((bookById(id)||{}).price),0);
+const payById=id=>D.pay.find(p=>p.id===id);
+const LIVE=()=>/^https:\/\/script\.google(usercontent)?\.com\//.test(D.set.api||'');
+function dlInfo(){const d=D.set.deadline;if(!d)return{open:true,date:''};const t=today(),ms=new Date(d+'T23:59:59')-new Date();return{open:t<=d,date:d,days:Math.max(0,Math.ceil(ms/864e5)-1)}}
+
+/* ---------- server (Google Apps Script) or demo ---------- */
+async function api(a,p={}){
+ if(!LIVE())return demo(a,p);
+ const ac=new AbortController(),to=setTimeout(()=>ac.abort(),30000);
+ try{const r=await fetch(D.set.api,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({a,...p}),signal:ac.signal});return await r.json()}
+ catch(e){return{ok:false,err:'אין חיבור לשרת כרגע. בודקים את האינטרנט ומנסים שוב.'}}finally{clearTimeout(to)}}
+
+/* demo mode – works with no server, sample data saved in this browser only */
+const DEMO_ST=(()=>{const L=[['רחלי כהן','ה׳1','0500000001'],['שרה כהן','ג׳2','0500000001'],['מירי כהן','א׳1','0500000001'],['חיה לוי','ה׳2','0500000002'],['אסתי לוי','ב׳1','0500000002'],['נחמי פרידמן','ד׳1','0500000003'],['טובי גולדברג','ו׳1','0500000004'],['בתיה רוזנברג','ז׳1','0500000005'],['רבקי רוזנברג','ג׳1','0500000005'],['פייגי שפירא','ח׳1','0500000006'],['שושי ברגר','א׳2','0500000007'],['חני וייס','ב׳2','0500000008'],['דבורי קליין','ד׳2','0500000009'],['ליבי הורוביץ','ו׳2','0500000010'],['מלכי אדלר','ז׳2','0500000011'],['צירי שטרן','ח׳2','0500000012'],['הדסה שטרן','ה׳1','0500000012'],['נעמי פרידמן','ב׳1','0500000003']];
+ return L.map(x=>({id:'s'+strHash(x[0]+'|'+x[2]),name:x[0],cls:x[1],grade:gradeOf(x[1]),phones:[x[2]],email:'demo@example.com'}))})();
+let DEMO_CODE='',DEMO_RID='',DEMO_RP='';
+async function demo(a,p){await sleep(500);
+ const O=lsGet('bk-demo-ord',{}),all=lsGet('bk-demo-st',null)||DEMO_ST;
+ const fam=n=>all.filter(s=>s.phones.includes(n)),pub=s=>({id:s.id,name:s.name,cls:s.cls,grade:s.grade,ph:s.phones.map(p=>p.slice(-3))}),mine=f=>Object.fromEntries(f.filter(s=>O[s.id]).map(s=>[s.id,O[s.id]]));
+ const nq=x=>String(x||'').replace(/[׳״'"`]/g,'').replace(/\s+/g,' ').trim();
+ if(a==='find'){const q=nq(p.q);if(q.length<2)return{ok:true,students:[]};const W=q.split(' ');return{ok:true,students:all.filter(s=>W.every(w=>nq(s.name).includes(w))).slice(0,8).map(pub)}}
+ if(a==='send'){let n;if(p.sid){const s=all.find(x=>x.id===p.sid);if(!s)return{ok:false,err:'התלמידה לא נמצאה'};n=s.phones[+p.pi||0]||s.phones[0];if(!n)return{ok:false,err:'לא רשום טלפון לתלמידה הזו. פונים למזכירות.'}}else n=ph(p.phone);
+  if(n.length<9)return{ok:false,err:'מספר הטלפון לא תקין'};if(!fam(n).length)return{ok:false,err:'המספר הזה לא רשום אצלנו. בודקים את המספר, או מחפשים לפי שם התלמידה.'};
+  DEMO_CODE=String(100000+Math.floor(Math.random()*900000));DEMO_RID=Math.random().toString(36).slice(2);DEMO_RP=n;return{ok:true,via:'email:de•••@example.com',rid:DEMO_RID,demo:DEMO_CODE}}
+ if(a==='verify'){if(!DEMO_CODE)return{ok:false,err:'תוקף הקוד פג. שולחים קוד חדש.'};if(String(p.code)!==DEMO_CODE)return{ok:false,err:'הקוד שגוי. בודקים ומנסים שוב.'};DEMO_CODE='';const n=p.rid&&p.rid===DEMO_RID?DEMO_RP:ph(p.phone),f=fam(n);return{ok:true,token:'demo.'+n,phone:n,kids:f.map(pub),orders:mine(f)}}
+ const tp=String(p.token||'').startsWith('demo.')?p.token.slice(5):'';
+ if(a==='mine'){if(!tp)return{ok:false,auth:1};const f=fam(tp);return{ok:true,kids:f.map(pub),orders:mine(f)}}
+ if(a==='save'){if(!tp)return{ok:false,auth:1};if(!dlInfo().open)return{ok:false,err:'מועד הזמנת הספרים הסתיים.'};
+  const k=fam(tp).find(s=>s.id===p.sid);if(!k)return{ok:false,err:'התלמידה לא נמצאה.'};
+  const ids=(p.books||[]).filter(id=>bookFor(bookById(id),k.grade));if(!ids.length)return{ok:false,err:'לא נבחרו ספרים.'};
+  const py=D.pay.find(x=>x.on&&x.id===p.pay);if(!py)return{ok:false,err:'נא לבחור אמצעי תשלום.'};
+  const old=O[k.id],now=new Date().toISOString();O[k.id]={books:ids,total:sumBooks(ids),pay:py.id,status:old?old.status:'חדשה',created:old?old.created:now,updated:now};lsSet('bk-demo-ord',O);
+  return{ok:true,total:O[k.id].total,orders:mine(fam(tp))}}
+ if(a==='a_all')return{ok:true,students:all,orders:Object.entries(O).map(([sid,o])=>{const s=all.find(x=>x.id===sid)||{};return{sid,name:s.name||'?',cls:s.cls||'',phone:(s.phones||[])[0]||'',email:s.email||'',...o}}),quota:100};
+ if(a==='a_students'){lsSet('bk-demo-st',p.rows);return{ok:true,n:p.rows.length}}
+ if(a==='a_st'){const L=all.slice(),i=L.findIndex(s=>s.id===(p.row||{}).id);if(p.del){if(i>=0)L.splice(i,1)}else if(i>=0)L[i]=p.row;else L.push(p.row);lsSet('bk-demo-st',L);return{ok:true}}
+ if(a==='a_status'){(p.sids||[]).forEach(id=>{if(O[id])O[id].status=p.status});lsSet('bk-demo-ord',O);return{ok:true}}
+ if(a==='a_mail')return{ok:true,sent:(p.msgs||[]).length,failed:[],demo:1};
+ if(a==='a_cfg')return{ok:true};
+ return{ok:false,err:'פעולה לא מוכרת'}}
+
+/* ---------- state ---------- */
+let SES=window.__BK_PV?null:lsGet('bk-ses',null);               // {token,phone,kids,orders}
+const saveSes=()=>{if(!window.__BK_PV)lsSet('bk-ses',SES)};
+const F={q:'',pi:0,rid:'',req:null,sid:'',phone:'',ch:'email',kid:'',sel:new Set(),pay:'',payOnly:false,via:'',demo:'',lastSaved:''};
+let STU=null,CUR='home';
+const kidById=id=>SES&&SES.kids.find(k=>k.id===id);
+const ordOf=id=>SES&&SES.orders&&SES.orders[id];
+const kidIdx=id=>SES?Math.max(0,SES.kids.findIndex(k=>k.id===id)):0;
+
+function toast(t,ms=2800){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),ms)}
+
+/* ---------- screens ---------- */
+const STEPI={id:0,code:1,pick:2,books:2,review:3,pay:4,done:5,thanks:5};
+const ICON={wa:'<svg viewBox="0 0 24 24" fill="#25D366" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.3 2.2 2.2 0 0 0 .2-1.3c-.1-.1-.3-.2-.5-.3z"/></svg>',
+ mail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18v12H3z"/><path d="m3 7 9 6 9-6"/></svg>'};
+const SHELF=(()=>{const B=[[24,48,206,'var(--rose)'],[76,40,176,'var(--sun)'],[120,54,228,'var(--ink)'],[178,36,168,'var(--leaf)'],[218,46,198,'var(--sky)'],[268,40,186,'#8c5bd1']];
+ let s='<rect x="6" y="282" width="408" height="16" rx="8" style="fill:var(--wood)"/>';
+ B.forEach(([x,w,hh,c],i)=>{const y=282-hh;s+=`<g class="bk" style="--d:${(i*.09).toFixed(2)}s"><rect x="${x}" y="${y}" width="${w}" height="${hh}" rx="6" style="fill:${c}"/><rect x="${x}" y="${y+16}" width="${w}" height="6" fill="#fff" opacity=".35"/><rect x="${x}" y="${282-30}" width="${w}" height="6" fill="#fff" opacity=".35"/><rect x="${x+w/2-7}" y="${y+40}" width="14" height="${Math.max(30,hh-110)}" rx="4" fill="#fff" opacity=".25"/></g>`});
+ s+=`<g class="bk" style="--d:.6s"><g transform="rotate(-17 360 282)"><rect x="318" y="96" width="46" height="186" rx="6" style="fill:var(--rose-deep)"/><rect x="318" y="112" width="46" height="6" fill="#fff" opacity=".35"/><rect x="318" y="252" width="46" height="6" fill="#fff" opacity=".35"/></g></g>`;
+ [['א',40,60,0],['ב',210,24,1.2],['ג',380,58,2.1],['✦',150,80,.6],['✦',300,30,1.7]].forEach(([l,x,y,d])=>{s+=`<text class="lt" x="${x}" y="${y}" font-size="${l==='✦'?22:40}" style="--d:${d}s" text-anchor="middle">${l}</text>`});
+ return '<svg viewBox="0 0 420 310" role="img" aria-label="מדף ספרים">'+s+'</svg>'})();
+const SMILE='<svg class="smile" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="#f4a72c"/><circle cx="42" cy="50" r="7" fill="#24305e"/><circle cx="78" cy="50" r="7" fill="#24305e"/><path d="M34 70q26 28 52 0" fill="none" stroke="#24305e" stroke-width="7" stroke-linecap="round"/><circle cx="30" cy="70" r="7" fill="#e5735c" opacity=".5"/><circle cx="90" cy="70" r="7" fill="#e5735c" opacity=".5"/></svg>';
+
+const V={};
+V.home=()=>{const dl=dlInfo(),has=SES&&SES.kids&&SES.kids.length&&Object.keys(SES.orders||{}).length;
+ let ctas;
+ if(!dl.open)ctas=`<div class="notice warn"><span style="font-size:26px">📕</span><div>${fmt(T().closed)}</div></div>`+(has?`<div class="cta-row" style="margin-top:16px"><button class="link-btn" data-a="family">לצפייה בהזמנות שלכם</button></div>`:'');
+ else if(has)ctas=`<div class="cta-row"><button class="cta alt" data-a="family"><span><b>לשינוי ההזמנה או אמצעי תשלום</b><small>הקליקו כאן</small></span><span class="arr">←</span></button></div><div class="cta-row" style="margin-top:16px"><button class="link-btn" data-a="start">הזמנה לבת אחרת מהמשפחה</button></div>`;
+ else ctas=`<div class="cta-row"><button class="cta" data-a="start"><span><b>להזמנת ספרים</b><small>הקליקו כאן</small></span><span class="arr">←</span></button></div>`+(SES&&SES.phone?`<div class="cta-row" style="margin-top:16px"><button class="link-btn" data-a="family">כבר הזמנתם? לשינוי ההזמנה</button></div>`:'');
+ return `<section class="hero"><div><span class="kicker">${esc(D.brand)}${D.set.year?' · '+esc(D.set.year):''}</span><h1>${fmt(T().h1)}</h1>${T().lead?`<p class="lead">${fmt(T().lead)}</p>`:''}${ctas}
+ ${dl.open&&dl.date?`<p class="dl">אפשר להזמין ולשנות עד <b>${dmy(dl.date)}</b>${dl.days<=30?`<span class="cnt">${dl.days?'נותרו '+dl.days+' ימים':'היום אחרון!'}</span>`:''}</p>`:''}</div>
+ <div class="hero-art">${SHELF}</div></section>
+ ${(T().how||[]).filter(x=>x.t).length?`<section class="how">${T().how.filter(x=>x.t).map(x=>`<div><i>${esc(x.i)}</i><b>${esc(x.t)}</b><span>${esc(x.s)}</span></div>`).join('')}</section>`:''}`};
+
+V.id=()=>`<div class="scr-head"><h2>מי מזמינה?</h2><p>מקלידים את שם התלמידה, או את מספר הטלפון שרשום בבית הספר.<br>נשלח קוד אימות קצר למייל של המשפחה.</p></div>
+ <div class="box find-box"><label class="find-in"><span class="find-ic" aria-hidden="true">🔍</span><input id="fq" type="search" autocomplete="off" placeholder="שם התלמידה או מספר טלפון…" aria-label="שם התלמידה או מספר טלפון" value="${esc(F.q||'')}"></label>
+  <div id="fres" aria-live="polite"></div><p class="err" id="iderr" role="alert"></p>
+  ${LIVE()?'':'<div class="demo">🧪 <b>מצב הדגמה</b> – עוד לא חובר שרת. לנסיון מקלידים <b>כהן</b>, או את המספר <b>050-0000001</b>. הקוד יוצג על המסך.</div>'}</div>
+ <button class="back" data-a="home">→ חזרה למסך הבית</button>`;
+
+V.code=()=>`<div class="otp-box box"><div style="font-size:46px">${F.via==='wa'?'💬':'✉️'}</div><h2 style="font-size:32px;margin:6px 0 8px">הקלידו את קוד האימות</h2>
+ <p class="muted" style="font-size:16.5px;margin:0 0 18px">שלחנו קוד בן 6 ספרות ${F.via==='wa'?'בוואטסאפ למספר <b dir="ltr">'+esc(phMask(F.phone))+'</b>':'למייל <b dir="ltr">'+esc(F.via.replace(/^email:/,''))+'</b>'}</p>
+ <div class="otp" id="otp">${'<input inputmode="numeric" maxlength="1" autocomplete="one-time-code" aria-label="ספרה">'.repeat(6)}</div>
+ <button class="btn pri wide" data-a="verify" id="verBtn">אימות והמשך</button><p class="err" id="cerr" role="alert"></p>
+ ${F.demo?`<div class="demo">🧪 מצב הדגמה – הקוד שלכם: <b>${esc(F.demo)}</b></div>`:''}
+ <p class="resend">לא הגיע? בודקים גם בתיקיית הספאם · <button data-a="resend" id="rsBtn" disabled>שליחה חוזרת</button></p></div>
+ <div class="center"><button class="back" data-a="id">→ חיפוש אחר</button></div>`;
+
+V.pick=()=>`<div class="scr-head"><h2>על המספר הזה רשומות כמה בנות 💛</h2><p>לאיזו בת תרצו להזמין עכשיו?</p></div>
+ <div class="kids">${SES.kids.map((k,i)=>{const o=ordOf(k.id);return `<button class="kid${k.id===F.sid?' pre':''}" data-a="kid" data-id="${esc(k.id)}"><span class="av" style="background:${kidColor(i)}">${esc(k.name[0]||'')}</span><b>${esc(k.name)}</b><small>כיתה ${esc(k.cls)}</small>${o?`<span class="tag ok">✓ כבר הוזמן · ${ils(o.total)}</span>`:'<span class="tag no">עוד לא הוזמן</span>'}</button>`}).join('')}</div>
+ <div class="center"><button class="back" data-a="home">→ למסך הבית</button></div>`;
+
+V.books=()=>{const k=kidById(F.kid),L=D.books.filter(b=>bookFor(b,k.grade)),subs=[...new Set(L.map(b=>b.sub||'כללי'))];
+ return `<div class="bk-head"><div><h2>הספרים של ${esc(k.name)}</h2><p>כיתה ${esc(k.cls)} · מסמנים וי על הספרים שתרצו להזמין</p></div><div class="bk-tools"><button class="btn soft" style="padding:10px 16px;font-size:15px" data-a="all">סימון הכול</button><button class="btn soft" style="padding:10px 16px;font-size:15px" data-a="none">ניקוי</button></div></div>
+ ${L.length?subs.map(s=>`<div class="sub-t">${esc(s)}</div><div class="books">${L.filter(b=>(b.sub||'כללי')===s).map(b=>{const i=D.books.indexOf(b);return `<label class="bk"><input type="checkbox" value="${esc(b.id)}" ${F.sel.has(b.id)?'checked':''}><span class="spine" style="--c:${BKC[i%BKC.length]}"></span><span class="tx"><b>${esc(b.t)}</b>${b.pub?`<small>${esc(b.pub)}</small>`:''}</span><span class="pr">${ils(b.price)}</span><span class="ck">✓</span></label>`}).join('')}</div>`).join(''):'<div class="box center">עוד לא הוגדרו ספרים לכיתה הזו. פונים למזכירות 🙏</div>'}
+ <div class="sbar"><span class="sm" id="selSum"></span><button class="btn sun" data-a="toreview">המשך לאישור ←</button></div>
+ <button class="back" data-a="${SES.kids.length>1?'pick':'home'}">→ חזרה</button>`};
+
+V.review=()=>{const k=kidById(F.kid),ids=[...F.sel];
+ return `<div class="scr-head"><h2>זה מה שבחרתם</h2><p>בודקים שהכול נכון ולוחצים אישור</p></div>
+ <div class="rev box"><div class="who"><span class="av" style="background:${kidColor(kidIdx(k.id))}">${esc(k.name[0])}</span><div><b>${esc(k.name)}</b><div class="muted">כיתה ${esc(k.cls)} · ${ids.length} ספרים</div></div></div>
+ <ul>${ids.map(id=>{const b=bookById(id);return `<li><span>${esc(b.t)}</span><span class="num">${ils(b.price)}</span></li>`}).join('')}</ul>
+ <div class="tot"><span>סה״כ לתשלום</span><b>${ils(sumBooks(ids))}</b></div>
+ <div class="act"><button class="btn soft" data-a="books">→ שינוי הבחירה</button><button class="btn pri" data-a="topay">אישור ✓</button></div></div>`};
+
+V.pay=()=>{const k=kidById(F.kid),P=D.pay.filter(p=>p.on);
+ return `<div class="scr-head"><h2>איך תרצו לשלם?</h2><p>בוחרים אמצעי תשלום ולוחצים אישור</p></div>
+ <p class="pay-sum">${esc(k.name)} · ${F.sel.size} ספרים · <b>${ils(sumBooks([...F.sel]))}</b></p>
+ <div class="pays" role="radiogroup" aria-label="אמצעי תשלום">${P.map(p=>`<label class="pay"><input type="radio" name="pay" value="${esc(p.id)}" ${F.pay===p.id?'checked':''}><span class="ic">${esc(p.ico||'•')}</span><span><b>${esc(p.title||p.name)}</b>${p.sub?`<small>${esc(p.sub)}</small>`:''}</span><span class="go">הקליקו כאן</span></label>`).join('')}</div>
+ <div class="act"><button class="btn soft" data-a="${F.payOnly?'family':'review'}">→ חזרה</button><button class="btn pri" data-a="save" id="saveBtn">אישור ושליחת ההזמנה ✓</button></div><p class="err center" id="perr" role="alert"></p>`};
+
+V.done=()=>{const k=kidById(F.kid),o=ordOf(F.kid),p=payById(o&&o.pay),rest=SES.kids.filter(x=>!ordOf(x.id)),link=p&&p.id==='credit'&&p.link?payLink(p.link,k,o):'';
+ const sum=`<p>ההזמנה של <b>${esc(k.name)}</b> נקלטה – ${o?ils(o.total):''}${p?' · '+esc(p.name):''}</p>${p&&p.after?`<div class="after">${fmt(p.after)}</div>`:''}${link?`<div class="act"><a class="btn sun" href="${esc(link)}" target="_blank" rel="noopener">💳 למעבר לתשלום באשראי</a></div>`:''}`;
+ if(rest.length)return `<div class="done">${SMILE}<h2>מעולה! ✓</h2>${sum}<div class="sis"><h3>האם ברצונך להזמין עכשיו גם בשביל האחיות החמודות? 💛</h3><div class="kids" style="max-width:none">${rest.map(x=>`<button class="kid" data-a="kid" data-id="${esc(x.id)}"><span class="av" style="background:${kidColor(kidIdx(x.id))}">${esc(x.name[0])}</span><b>${esc(x.name)}</b><small>כיתה ${esc(x.cls)}</small><span class="tag no">להזמנה ←</span></button>`).join('')}</div><div class="act"><button class="btn soft" data-a="thanks">לא עכשיו, תודה</button></div></div></div>`;
+ return V.thanks(sum)};
+V.thanks=(sum)=>{if(sum===undefined){const o=ordOf(F.kid),k=kidById(F.kid),p=payById(o&&o.pay);sum=k&&o?`<p>ההזמנה של <b>${esc(k.name)}</b> נקלטה – ${ils(o.total)}${p?' · '+esc(p.name):''}</p>`:''}
+ return `<div class="done">${SMILE}<h2>${fmt(T().thanks)}</h2><p style="font-size:21px;color:var(--ink)">${fmt(T().arrive)} 😊</p>${sum}
+ <div class="act"><button class="btn pri" data-a="family">לשינוי ההזמנה או אמצעי תשלום הקליקו כאן</button><button class="btn soft" data-a="home">למסך הבית</button></div>
+ ${dlInfo().date?`<p class="muted" style="margin-top:18px">אפשר לשנות עד ${dmy(D.set.deadline)}</p>`:''}</div>`};
+
+V.family=()=>{const dl=dlInfo();
+ return `<div class="scr-head"><h2>ההזמנות שלכם</h2><p>על המספר <b dir="ltr">${esc(phMask(SES.phone))}</b> רשומות ${SES.kids.length===1?'בת אחת':SES.kids.length+' בנות'}${dl.open&&dl.date?' · אפשר לשנות עד '+dmy(dl.date):''}</p></div>
+ <div class="fam">${SES.kids.map((k,i)=>{const o=ordOf(k.id),p=o&&payById(o.pay);
+  return `<div class="fcard"><span class="av" style="background:${kidColor(i)}">${esc(k.name[0])}</span><div><b>${esc(k.name)}</b><div class="meta">כיתה ${esc(k.cls)}${o?` · <em>${o.books.length} ספרים · ${ils(o.total)}</em> · ${esc(p?p.name:o.pay)}`:''}</div>${o?statusTag(o.status):'<span class="tag no">עוד לא הוזמן</span>'}</div>
+  <div class="fb">${dl.open?(o?`<button class="btn soft" data-a="editbooks" data-id="${esc(k.id)}">📚 שינוי ספרים</button><button class="btn soft" data-a="editpay" data-id="${esc(k.id)}">💳 שינוי תשלום</button>`:`<button class="btn pri" data-a="kid" data-id="${esc(k.id)}">להזמנה ←</button>`):''}</div></div>`}).join('')}
+ <div class="center"><button class="back" data-a="home">→ למסך הבית</button> · <button class="back" data-a="logout">יציאה מהמכשיר הזה</button></div></div>`};
+const statusTag=s=>({'חדשה':'<span class="tag ok">✓ ההזמנה התקבלה</span>','שולם':'<span class="tag ok">✓ שולם</span>','סופק':'<span class="tag ok">📚 הספרים נמסרו</span>','בוטל':'<span class="tag cx">ההזמנה בוטלה</span>'})[s]||'<span class="tag ok">✓ התקבלה</span>';
+const payLink=(tpl,k,o)=>tpl.replace(/\{(\w+)\}/g,(m,x)=>({sum:String(o.total),total:String(o.total),name:k.name,cls:k.cls,phone:SES.phone})[x]!=null?encodeURIComponent(({sum:String(o.total),total:String(o.total),name:k.name,cls:k.cls,phone:SES.phone})[x]):m);
+
+function go(v,o={}){
+ if(['pick','books','review','pay','done','family'].includes(v)&&!SES){v='home'}
+ if(['books','review','pay'].includes(v)&&!kidById(F.kid))v=SES&&SES.kids.length>1?'pick':'home';
+ CUR=v;const st=$('#stage');st.classList.remove('in');st.innerHTML=V[v]();void st.offsetWidth;st.classList.add('in');
+ const si=STEPI[v],S=$('#steps');S.classList.toggle('on',si!=null);if(si!=null)$$('li',S).forEach((li,i)=>{li.className=i<si?'ok':i===si?'now':''});
+ document.body.classList.toggle('has-sbar',v==='books');
+ if(!o.keep)scrollTo({top:0,behavior:o.instant?'auto':'smooth'});
+ if(!o.nohist)try{history.pushState({v},'')}catch{}
+ (AFTER[v]||(()=>{}))();topBar()}
+addEventListener('popstate',e=>{const v=e.state&&e.state.v;if(!v||$('.adm.open'))return;go(['code','done','thanks'].includes(v)?'home':v,{nohist:true})});
+
+const AFTER={};
+let FOUND=[];
+const isPhoneQ=v=>/^[\d\s\-+().]+$/.test(v)&&v.replace(/\D/g,'').length>=3;
+const fullPhone=v=>{const d=ph(v);return /^0\d{8,9}$/.test(d)?d:''};
+AFTER.id=()=>{const inp=$('#fq'),R=$('#fres');let t=0,seq=0;
+ const words=()=>String(F.q||'').replace(/[׳״'"]/g,'').split(/\s+/).filter(Boolean);
+ const hl=s=>{let x=esc(s);words().forEach(w=>{if(w.length>=2)x=x.replace(new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'),'<mark>$&</mark>')});return x};
+ const masked=x=>'<b dir="ltr">•••-••••'+esc(x)+'</b>';
+ const body=s=>{const P=s.ph||[];
+  return `<div class="fr-b">${P.length>1?`<div class="fr-q">לאיזה טלפון לשלוח? (שני הטלפונים הרשומים אצלנו)</div><div class="fr-phs">${P.map((x,i)=>`<label><input type="radio" name="pi" value="${i}" ${i===(F.pi||0)?'checked':''}><span>📱 ${masked(x)}</span></label>`).join('')}</div>`:P.length?`<div class="fr-one">📱 הטלפון הרשום אצלנו: ${masked(P[0])}</div>`:'<div class="fr-one">לא רשום טלפון לתלמידה הזו. פונים למזכירות.</div>'}
+   ${P.length?'<button class="btn pri wide" data-a="send" id="sendBtn">שליחת קוד אימות</button><small class="fr-note">הקוד יישלח למייל של המשפחה שרשום בבית הספר</small>':''}</div>`};
+ const drawRes=()=>{if(!R.isConnected)return;
+  if(!FOUND.length){R.innerHTML='<div class="empty">לא מצאנו תלמידה בשם הזה 🤔<br>בודקים את האיות, מנסים רק שם משפחה – או מקלידים את מספר הטלפון</div>';return}
+  R.innerHTML='<div class="fr-list">'+FOUND.map(s=>{const on=s.id===F.sid;return `<div class="fr${on?' on':''}"><button class="fr-h" data-a="pickst" data-id="${esc(s.id)}" aria-expanded="${on}"><span class="av">${esc(s.name[0]||'')}</span><span class="fr-t"><b>${hl(s.name)}</b><small>כיתה ${esc(s.cls)}</small></span><span class="fr-p">${(s.ph||[]).map(x=>'<span dir="ltr">•••'+esc(x)+'</span>').join(' ')}</span></button>${on?body(s):''}</div>`}).join('')+'</div>'+(FOUND.length>=8?'<p class="muted center" style="margin:8px 0 0">יש עוד תוצאות – מקלידים גם שם פרטי וגם שם משפחה</p>':'');
+  $$('input[name=pi]',R).forEach(r=>r.addEventListener('change',()=>{F.pi=+r.value}))};
+ const draw=()=>{const v=inp.value.trim();F.q=v;$('#iderr').textContent='';
+  if(isPhoneQ(v)){seq++;F.sid='';const d=fullPhone(v);
+   R.innerHTML=d?`<div class="fr-phone"><div>📱 <b dir="ltr">${esc(phFmt(d))}</b></div><button class="btn pri wide" data-a="sendph" id="sendBtn">שליחת קוד אימות</button><small class="fr-note">אם המספר רשום אצלנו – הקוד יישלח למייל של המשפחה</small></div>`:'<div class="empty">ממשיכים להקליד את מספר הטלפון…</div>';return}
+  if(v.replace(/[׳״'"\s]/g,'').length<2){seq++;FOUND=[];R.innerHTML=v?'<div class="empty">ממשיכים להקליד…</div>':'';return}
+  const my=++seq;R.innerHTML='<div class="empty"><span class="spin"></span> מחפשים…</div>';clearTimeout(t);
+  t=setTimeout(async()=>{const r=await api('find',{q:v});if(my!==seq)return;if(!r.ok){R.innerHTML='<div class="empty">'+esc(r.err||'שגיאה בחיפוש')+'</div>';return}FOUND=r.students||[];if(FOUND.length===1&&!F.sid)F.sid=FOUND[0].id,F.pi=0;drawRes()},320)};
+ AFTER._drawRes=drawRes;
+ inp.addEventListener('input',draw);
+ inp.addEventListener('keydown',e=>{if(e.key!=='Enter')return;e.preventDefault();if(fullPhone(inp.value.trim())&&isPhoneQ(inp.value.trim()))sendCode('phone');else if(F.sid&&FOUND.some(s=>s.id===F.sid))sendCode('sid')});
+ if(F.q){if(!isPhoneQ(F.q)&&FOUND.length)drawRes();else draw()}
+ setTimeout(()=>inp.focus(),80)};
+AFTER.code=()=>{const I=$$('#otp input');I[0].focus();
+ I.forEach((inp,i)=>{inp.addEventListener('input',()=>{const v=inp.value.replace(/\D/g,'');inp.value=v.slice(-1);if(v&&i<5)I[i+1].focus();if(I.every(x=>x.value))verify()});
+  inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!inp.value&&i>0){I[i-1].focus();I[i-1].value=''}else if(e.key==='Enter')verify()});
+  inp.addEventListener('paste',e=>{const t=(e.clipboardData.getData('text')||'').replace(/\D/g,'').slice(0,6);if(!t)return;e.preventDefault();t.split('').forEach((c,j)=>I[j]&&(I[j].value=c));(I[t.length]||I[5]).focus();if(t.length===6)verify()})});
+ let n=30;const b=$('#rsBtn');clearInterval(AFTER._t);AFTER._t=setInterval(()=>{if(!b.isConnected)return clearInterval(AFTER._t);n--;b.textContent=n>0?'שליחה חוזרת ('+n+')':'שליחה חוזרת';if(n<=0){b.disabled=false;clearInterval(AFTER._t)}},1000)};
+AFTER.books=()=>{const upd=()=>{F.sel=new Set($$('.bk input:checked').map(i=>i.value));const e=$('#selSum');if(e)e.innerHTML=F.sel.size?`נבחרו ${F.sel.size} ספרים<b>${ils(sumBooks([...F.sel]))}</b>`:'עוד לא נבחרו ספרים'};
+ $$('.bk input').forEach(i=>i.addEventListener('change',upd));upd()};
+AFTER.pay=()=>{$$('input[name=pay]').forEach(r=>r.addEventListener('change',()=>{F.pay=r.value;$('#perr').textContent=''}))};
+AFTER.done=()=>confetti();AFTER.thanks=()=>{};
+
+const clsSort=(a,b)=>{const ga=D.grades.indexOf(gradeOf(a)),gb=D.grades.indexOf(gradeOf(b));return (ga<0?99:ga)-(gb<0?99:gb)||String(a).localeCompare(String(b),'he',{numeric:true})};
+
+/* ---------- actions ---------- */
+/* send a code: by a picked girl (her registered phone, chosen by index) or by a typed phone; 'again' = resend the same request */
+async function sendCode(how){
+ const err=t=>{const e=$('#iderr')||$('#cerr');if(e)e.textContent=t;else toast(t)};
+ if(how==='sid'){if(!F.sid)return err('בוחרים קודם את התלמידה מהרשימה');F.req={sid:F.sid,pi:F.pi||0};F.phone=''}
+ else if(how==='phone'){const d=fullPhone(($('#fq')||{}).value||'');if(!d)return err('נא להקליד מספר טלפון תקין');F.req={phone:d};F.phone=d}
+ if(!F.req)return go('id');
+ const b=$('#sendBtn')||$('#rsBtn');if(b){b.disabled=true;b._t=b.textContent;b.textContent='שולחים…'}
+ const r=await api('send',{...F.req,ch:'email'});
+ if(b&&b.isConnected){b.disabled=false;b.textContent=b._t}
+ if(!r.ok)return err(r.err||'משהו השתבש. נסו שוב');
+ F.via=r.via||'email:';F.rid=r.rid||'';F.demo=r.demo||'';
+ if(how==='again'&&CUR==='code'){go('code',{nohist:true,keep:true});toast('שלחנו קוד חדש ✓')}else go('code')}
+async function reauth(next){F.req={phone:SES.phone};F.phone=SES.phone;AFTER._next=next;toast('לאבטחה – שולחים קוד אימות קצר');
+ const x=await api('send',{phone:SES.phone,ch:'email'});if(!x.ok){toast(x.err||'שגיאה');return go('id')}F.via=x.via||'email:';F.rid=x.rid||'';F.demo=x.demo||'';go('code')}
+let verifying=false;
+async function verify(){if(verifying)return;const code=$$('#otp input').map(i=>i.value).join('');if(code.length<6){$('#cerr').textContent='מקלידים את כל 6 הספרות';return}
+ verifying=true;const b=$('#verBtn');b.disabled=true;b.textContent='בודקים…';
+ const r=await api('verify',{rid:F.rid||'',phone:F.phone||'',code});verifying=false;if(b.isConnected){b.disabled=false;b.textContent='אימות והמשך'}
+ if(!r.ok){$('#cerr').textContent=r.err||'הקוד שגוי';const o=$('#otp');o.classList.remove('shake');void o.offsetWidth;o.classList.add('shake');$$('#otp input').forEach(i=>i.value='');$('#otp input').focus();return}
+ SES={token:r.token,phone:r.phone,kids:r.kids,orders:r.orders||{}};saveSes();F.demo='';
+ const next=AFTER._next;AFTER._next=null;if(next)return next();
+ if(SES.kids.length>1)return go('pick');
+ startKid(SES.kids[0].id)}
+function startFlow(){if(!dlInfo().open)return toast(T().closed);SES&&SES.kids&&SES.kids.length?(SES.kids.length>1?go('pick'):startKid(SES.kids[0].id)):go('id')}
+function startKid(id){F.kid=id;F.payOnly=false;const o=ordOf(id);F.sel=new Set(o?o.books:[]);F.pay=o?o.pay:'';go('books')}
+async function family(){if(!SES)return go('home');
+ const b=$('[data-a=family]');if(b)b.disabled=true;
+ const r=await api('mine',{token:SES.token});
+ if(r.ok){SES.kids=r.kids;SES.orders=r.orders||{};saveSes();return go('family')}
+ if(r.auth)return reauth(()=>go('family'));
+ if(b)b.disabled=false;toast(r.err||'אין חיבור לשרת');if(SES.kids&&SES.kids.length)go('family')}
+let saving=false;
+async function save(){if(saving)return;if(!F.pay){$('#perr').textContent='בוחרים אמצעי תשלום';return}
+ const sh=shabNow();if(sh&&!adminLive()){showShab(sh);return}
+ saving=true;const b=$('#saveBtn');b.disabled=true;b.textContent='שולחים את ההזמנה…';
+ const r=await api('save',{token:SES.token,sid:F.kid,books:[...F.sel],pay:F.pay});saving=false;if(b.isConnected){b.disabled=false;b.textContent='אישור ושליחת ההזמנה ✓'}
+ if(!r.ok){if(r.auth)return reauth(()=>go('pay'));$('#perr').textContent=r.err||'משהו השתבש. נסו שוב';return}
+ SES.orders=r.orders||SES.orders;saveSes();go('done')}
+
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t||t.closest('.adm'))return;const a=t.dataset.a,id=t.dataset.id;
+ if(a==='home')go('home');
+ else if(a==='start')startFlow();
+ else if(a==='id')go('id');
+ else if(a==='pickst'){F.sid=F.sid===id?'':id;F.pi=0;AFTER._drawRes&&AFTER._drawRes();const c=$('.fr.on');if(c)c.scrollIntoView({block:'nearest',behavior:'smooth'})}
+ else if(a==='send')sendCode('sid');
+ else if(a==='sendph')sendCode('phone');
+ else if(a==='resend')sendCode('again');
+ else if(a==='verify')verify();
+ else if(a==='pick')go('pick');
+ else if(a==='kid')startKid(id);
+ else if(a==='all'){$$('.bk input').forEach(i=>{i.checked=true;i.dispatchEvent(new Event('change'))})}
+ else if(a==='none'){$$('.bk input').forEach(i=>{i.checked=false;i.dispatchEvent(new Event('change'))})}
+ else if(a==='books')go('books');
+ else if(a==='toreview'){if(!F.sel.size)return toast('מסמנים לפחות ספר אחד 📚');go('review')}
+ else if(a==='review')go('review');
+ else if(a==='topay')go('pay');
+ else if(a==='save')save();
+ else if(a==='thanks')go('thanks');
+ else if(a==='family')family();
+ else if(a==='editbooks')startKid(id);
+ else if(a==='editpay'){F.kid=id;const o=ordOf(id);F.sel=new Set(o.books);F.pay=o.pay;F.payOnly=true;go('pay')}
+ else if(a==='logout'){if(confirm('לצאת מהמכשיר הזה? בפעם הבאה נבקש קוד אימות חדש.')){SES=null;saveSes();F.sid='';F.phone='';go('home')}}
+ else if(a==='chat')chatToggle();
+});
+
+function topBar(){$('#topAct').innerHTML=(SES&&SES.kids&&SES.kids.length&&CUR!=='family'?'<button class="pill ghost" data-a="family">ההזמנות שלי</button>':'')}
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;const w=h('div',{class:'confetti','aria-hidden':'true'});const C=['#f4a72c','#e5735c','#5a7fd8','#2f8f7b','#24305e'];
+ for(let i=0;i<70;i++){const c=h('i');c.style.left=Math.random()*100+'%';c.style.background=C[i%C.length];c.style.animationDuration=(1.8+Math.random()*1.8)+'s';c.style.animationDelay=Math.random()*.5+'s';c.style.transform='rotate('+Math.random()*360+'deg)';w.append(c)}
+ document.body.append(w);setTimeout(()=>w.remove(),4500)}
+
+/* ---------- Shabbat & Yom Tov: ordering closes (Jerusalem times) ---------- */
+function sunset(y,m,d){const R=Math.PI/180,lat=31.778,lon=35.235,N=Math.floor(275*m/9)-Math.floor((m+9)/12)*(1+Math.floor((y-4*Math.floor(y/4)+2)/3))+d-30,t=N+((18-lon/15)/24);
+ const M=0.9856*t-3.289;let L=M+1.916*Math.sin(M*R)+0.020*Math.sin(2*M*R)+282.634;L=(L+360)%360;let RA=Math.atan(0.91764*Math.tan(L*R))/R;RA=(RA+360)%360;RA=(RA+Math.floor(L/90)*90-Math.floor(RA/90)*90)/15;
+ const sd=0.39782*Math.sin(L*R),cd=Math.cos(Math.asin(sd)),ch=(Math.cos(90.833*R)-sd*Math.sin(lat*R))/(cd*Math.cos(lat*R));const H=Math.acos(ch)/R/15,UT=((H+RA-0.06571*t-6.622-lon/15)%24+24)%24;
+ return Date.UTC(y,m-1,d)+UT*3600000}
+const HF=(()=>{try{return new Intl.DateTimeFormat('en-u-ca-hebrew',{day:'numeric',month:'long',timeZone:'UTC'})}catch{return null}})();
+const YT=['1 Tishri','2 Tishri','10 Tishri','15 Tishri','22 Tishri','15 Nisan','21 Nisan','6 Sivan'];
+function ilParts(ms){const p={};new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Jerusalem',year:'numeric',month:'numeric',day:'numeric'}).formatToParts(new Date(ms)).forEach(x=>p[x.type]=+x.value);return p}
+function isRest(y,m,d){const dt=new Date(Date.UTC(y,m-1,d,12));if(dt.getUTCDay()===6)return 'שבת';if(HF){const s=HF.format(dt);if(YT.includes(s))return 'חג'}return ''}
+function shabNow(){if(!D.set.shabbat)return null;const now=Date.now(),p=ilParts(now),ss=sunset(p.year,p.month,p.day),tp=ilParts(now+864e5);
+ const todayR=isRest(p.year,p.month,p.day),tomR=isRest(tp.year,tp.month,tp.day);
+ if(todayR&&now<ss+45*6e4)return{w:todayR,end:ss+45*6e4};
+ if(tomR&&now>ss-40*6e4){let e=sunset(tp.year,tp.month,tp.day)+45*6e4;let q=ilParts(e+864e5);if(isRest(q.year,q.month,q.day))e=sunset(q.year,q.month,q.day)+45*6e4;return{w:tomR,end:e}}
+ return null}
+const adminLive=()=>!!(window.__BK_ADMIN||window.__BK_PV);
+function showShab(s){const E=$('#shab');const t=new Date(s.end).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
+ E.innerHTML=`<div class="shc"><div class="candles"><i></i><i></i></div><h2>${s.w==='שבת'?'שבת שלום!':'חג שמח!'}</h2><p>מערכת הזמנת הספרים סגורה ${s.w==='שבת'?'בשבת':'בחג'}.<br>נשמח לראותכם ${s.w==='שבת'?'במוצאי שבת':'במוצאי החג'}, אחרי ${t}.</p></div>`;E.classList.add('on')}
+function shabCheck(){const s=shabNow();if(s&&!adminLive())showShab(s);else $('#shab').classList.remove('on')}
+
+/* ---------- chat: quick buttons + keyword matching, answers only from the site's own data ---------- */
+function chatInit(){const w=$('#chat');if(!D.set.chat){w.innerHTML='';return}if(w.dataset.ok)return;w.dataset.ok=1;
+ w.innerHTML=`<div class="ch-panel" role="dialog" aria-label="צ׳אט עזרה"><div class="ch-head"><span class="av">📚</span><b>עזרה בהזמנה</b><button class="ch-x" data-a="chat" aria-label="סגירה">✕</button></div><div class="ch-body" id="chB"></div><div class="ch-q" id="chQ"></div><form class="ch-in" id="chF"><input id="chI" placeholder="כתבו שאלה…" aria-label="שאלה"><button aria-label="שליחה">➤</button></form></div><button class="ch-fab" data-a="chat" aria-label="צ׳אט עזרה"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/></svg></button>`;
+ $('#chF').addEventListener('submit',e=>{e.preventDefault();const v=$('#chI').value.trim();if(!v)return;$('#chI').value='';chatAsk(v)});
+ $('#chQ').addEventListener('click',e=>{const b=e.target.closest('button');if(b)chatAsk(b.textContent,+b.dataset.i)});
+ $('#chB').addEventListener('click',e=>{const g=e.target.closest('[data-go]');if(!g)return;e.preventDefault();chatToggle();const x=g.dataset.go;x==='family'?family():x==='start'?startFlow():go(x)})}
+function chatToggle(){const w=$('#chat'),o=w.classList.toggle('open');if(o&&!$('#chB').children.length){chatBot('שלום! 👋 אפשר לשאול כאן כל שאלה על הזמנת הספרים.');chatChips()}if(o)setTimeout(()=>$('#chI').focus(),200)}
+function chatChips(){$('#chQ').innerHTML=['איך מזמינים?','עד מתי אפשר לשנות?','אמצעי תשלום','לא קיבלתי קוד','איך משנים הזמנה?','דברו איתנו'].map((q,i)=>`<button type="button" data-i="${i}">${q}</button>`).join('')}
+function chatMsg(cls,html){const m=h('div',{class:'ch-m '+cls});m.innerHTML=html;$('#chB').append(m);$('#chB').scrollTop=1e6}
+const chatBot=html=>setTimeout(()=>chatMsg('bot',html),280);
+const cw=s=>String(s).replace(/[?!.,:;׳״'"]/g,' ').split(/\s+/).map(w=>w.replace(/^(ו|ה|ב|ל|מ|ש|כ)(?=.{3,})/,'')).filter(w=>w.length>=2);
+function chatAsk(q,ix){chatMsg('me',esc(q));const n=' '+q+' ',has=a=>a.some(w=>n.includes(w));const dl=dlInfo(),pays=D.pay.filter(p=>p.on);
+ const contact=()=>{const c=[];if(D.set.phone)c.push(`📞 <a href="tel:${esc(ph(D.set.phone))}">${esc(D.set.phone)}</a>`);if(D.set.wa)c.push(`<a href="https://wa.me/972${esc(ph(D.set.wa).slice(1))}" target="_blank" rel="noopener">💬 וואטסאפ</a>`);if(D.set.email)c.push(`✉️ <a href="mailto:${esc(D.set.email)}">${esc(D.set.email)}</a>`);return c.length?c.join('<br>'):'אפשר לפנות למזכירות בית הספר.'};
+ let a='';
+ if(ix===0||has(['איך מזמינ','להזמין','הזמנה חדשה','רוצה להזמין']))a='זה פשוט: בוחרים את שם התלמידה, מקלידים טלפון, מאמתים בקוד, מסמנים ספרים ובוחרים אמצעי תשלום. <a href="#" data-go="start">להתחלה ←</a>';
+ else if(ix===1||has(['עד מתי','תאריך','מועד','אחרון']))a=dl.date?(dl.open?`אפשר להזמין ולשנות עד <b>${dmy(dl.date)}</b>.`:'מועד ההזמנות הסתיים.'):'אין כרגע תאריך סגירה.';
+ else if(ix===2||has(['תשלום','לשלם','אשראי','הוראת קבע','מזומן','צק','צ׳ק','שיק']))a='אפשר לשלם ב:<br>'+pays.map(p=>'• '+esc(p.name)).join('<br>');
+ else if(ix===3||has(['קוד','לא קיבלתי','אימות','לא הגיע']))a='הקוד נשלח למייל שרשום בבית הספר. מחכים דקה ובודקים גם בספאם. אם המספר לא מוכר – צריך לעדכן אותו במזכירות.<br>'+contact();
+ else if(ix===4||has(['לשנות','שינוי','לעדכן','לבטל']))a=dl.open?'נכנסים ל<a href="#" data-go="family">ההזמנות שלי</a>, ושם אפשר לשנות ספרים או אמצעי תשלום.':'מועד השינויים הסתיים. לשינוי – פונים למזכירות.<br>'+contact();
+ else if(ix===5||has(['טלפון','לדבר','מזכירות','נציג','צור קשר','וואטסאפ']))a=contact();
+ else if(has(['ספרים הגיעו','מתי יגיעו','מתי מקבלים','יגיעו']))a='נשלח לכם עדכון מיד כשהספרים יגיעו 😊';
+ else{const qw=cw(q).filter(w=>w.length>=3);let best=null,bs=0;(D.faq||[]).forEach(f=>{const fw=cw(f.q+' '+f.a);const s=qw.filter(w=>fw.some(x=>x.includes(w)||w.includes(x))).length;if(s>bs){bs=s;best=f}});
+  a=best&&bs?'<b>'+esc(best.q)+'</b><br>'+fmt(best.a):'לא בטוח שהבנתי 🙂 אפשר לבחור אחת מהשאלות למטה, או לפנות אלינו:<br>'+contact()}
+ chatBot(a)}
+
+/* ---------- render shell ---------- */
+function theme(){let st=$('#bk-theme');if(!st){st=h('style',{id:'bk-theme'});document.head.append(st)}const t=D.theme||{};st.textContent=':root{'+['ink','sun','rose','leaf','cream'].map(k=>t[k]?'--'+k+':'+t[k]+';':'').join('')+'}'}
+function shell(){theme();document.title=D.seo.title||D.brand;const md=$('meta[name=description]');if(md)md.setAttribute('content',D.seo.desc||'');
+ $('#b-name').textContent=D.brand;$('#b-sub').textContent='הזמנת ספרים'+(D.set.year?' · '+D.set.year:'');
+ $('#f-name').textContent=D.brand;$('#f-line').textContent=T().line||'';$('#f-copy').textContent='© '+D.brand;
+ $('#f-con').innerHTML=(D.set.phone?`<a href="tel:${esc(ph(D.set.phone))}">📞 ${esc(D.set.phone)}</a>`:'')+(D.set.wa?`<a href="https://wa.me/972${esc(ph(D.set.wa).slice(1))}" target="_blank" rel="noopener">💬 וואטסאפ</a>`:'')+(D.set.email?`<a href="mailto:${esc(D.set.email)}">✉️ <bdi dir="ltr">${esc(D.set.email)}</bdi></a>`:'');
+ chatInit()}
+shell();go('home',{nohist:true,instant:true});try{history.replaceState({v:'home'},'')}catch{}
+/* dashboard live preview only: show any screen with sample data (inactive on the real site) */
+if(window.__BK_PV)addEventListener('message',e=>{const v=e.data&&e.data.bkpv;if(!v||!V[v]||e.source!==parent)return;
+ const g=D.grades.find(x=>D.books.some(b=>b.on!==false&&b.grades.includes(x)))||D.grades[0]||'';
+ const k1={id:'pv1',name:'רחלי כהן',cls:g+'׳1',grade:g},k2={id:'pv2',name:'שרה כהן',cls:(D.grades[1]||g)+'׳2',grade:D.grades[1]||g};
+ const L=D.books.filter(b=>bookFor(b,g));Object.assign(F,{kid:'pv1',sid:'',sel:new Set(L.slice(0,3).map(b=>b.id)),pay:(D.pay.find(p=>p.on)||{}).id||'',via:'wa',phone:'0500000001',payOnly:false,demo:'123456'});
+ const o={books:[...F.sel],total:sumBooks([...F.sel]),pay:F.pay,status:'חדשה'};
+ SES=v==='home'||v==='id'?null:{token:'',phone:'0500000001',kids:[k1,k2],orders:['done','thanks','family'].includes(v)?{pv1:o}:{}};
+ go(v,{nohist:true,instant:true})});
+shabCheck();setInterval(shabCheck,60000);
+
+
+})();
+</script>
+</body>
+</html>
