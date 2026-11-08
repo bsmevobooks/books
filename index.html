@@ -272,7 +272,7 @@
   .fb .btn{padding:11px 18px;font-size:15px}
 
   /* toast */
-  #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,30px);opacity:0;z-index:500;background:var(--ink);color:#fff;border-radius:16px;padding:13px 20px;font-weight:600;box-shadow:0 20px 40px -14px rgba(0,0,0,.5);transition:all .3s;pointer-events:none;max-width:calc(100vw - 30px);text-align:center}
+  #toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,30px);opacity:0;z-index:2000;background:var(--ink);color:#fff;border-radius:16px;padding:13px 20px;font-weight:600;box-shadow:0 20px 40px -14px rgba(0,0,0,.5);transition:all .3s;pointer-events:none;max-width:calc(100vw - 30px);text-align:center}
   #toast.on{opacity:1;transform:translate(-50%,0)}
 
   /* footer */
@@ -390,8 +390,8 @@ const BKC=['#e5735c','#5a7fd8','#2f8f7b','#f4a72c','#8c5bd1','#24305e','#d4568a'
 /* ---------- data ---------- */
 let D=JSON.parse($('#site-data').textContent);
 let PUB=JSON.stringify(D);
-const DEF={brand:'',seo:{title:'',desc:''},set:{pass:'',api:'',year:'',deadline:'',otp:'both',phone:'',email:'',wa:'',shabbat:true,chat:true,site:''},texts:{h1:'',lead:'',thanks:'תודה על הזמנתך!',arrive:'תקבלו עדכון מיד כשהספרים יגיעו',line:'',closed:''},grades:['א','ב','ג','ד','ה','ו','ז','ח'],books:[],pay:[],faq:[],theme:{}};
-function norm(d){for(const k in DEF){const v=DEF[k];if(d[k]==null)d[k]=JSON.parse(JSON.stringify(v));else if(v&&typeof v==='object'&&!Array.isArray(v))for(const j in v)if(d[k][j]==null)d[k][j]=v[j]}
+const DEF={brand:'',seo:{title:'',desc:''},set:{pass:'',api:'',year:'',deadline:'',otp:'both',phone:'',email:'',wa:'',shabbat:true,chat:true,site:''},texts:{h1:'',lead:'',thanks:'תודה על הזמנתך!',arrive:'תקבלו עדכון מיד כשהספרים יגיעו',line:'',closed:'',how:[{i:'👧',t:'מזהים',s:'בוחרים את שם התלמידה ומאמתים בקוד לוואטסאפ או למייל'},{i:'📚',t:'מסמנים',s:'רק הספרים של הכיתה שלה מופיעים – מסמנים וי'},{i:'💳',t:'משלמים',s:'הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות'},{i:'😊',t:'מקבלים',s:'נעדכן אתכם מיד כשהספרים מגיעים'}]},grades:['א','ב','ג','ד','ה','ו','ז','ח'],books:[],pay:[],faq:[],theme:{}};
+function norm(d){for(const k in DEF){const v=DEF[k];if(d[k]==null)d[k]=JSON.parse(JSON.stringify(v));else if(v&&typeof v==='object'&&!Array.isArray(v))for(const j in v)if(d[k][j]==null)d[k][j]=JSON.parse(JSON.stringify(v[j]))}
  d.books.forEach(b=>{b.id=b.id||'b'+strHash(b.t+Math.random());b.grades=b.grades||[];if(b.on==null)b.on=true});return d}
 norm(D);
 const T=()=>D.texts;
@@ -437,8 +437,8 @@ async function demo(a,p){await sleep(500);
  return{ok:false,err:'פעולה לא מוכרת'}}
 
 /* ---------- state ---------- */
-let SES=lsGet('bk-ses',null);               // {token,phone,kids,orders}
-const saveSes=()=>lsSet('bk-ses',SES);
+let SES=window.__BK_PV?null:lsGet('bk-ses',null);               // {token,phone,kids,orders}
+const saveSes=()=>{if(!window.__BK_PV)lsSet('bk-ses',SES)};
 const F={sid:'',phone:'',ch:'wa',kid:'',sel:new Set(),pay:'',payOnly:false,via:'',demo:'',lastSaved:''};
 let STU=null,CUR='home';
 const kidById=id=>SES&&SES.kids.find(k=>k.id===id);
@@ -468,7 +468,7 @@ V.home=()=>{const dl=dlInfo(),has=SES&&SES.kids&&SES.kids.length&&Object.keys(SE
  return `<section class="hero"><div><span class="kicker">${esc(D.brand)}${D.set.year?' · '+esc(D.set.year):''}</span><h1>${fmt(T().h1)}</h1>${T().lead?`<p class="lead">${fmt(T().lead)}</p>`:''}${ctas}
  ${dl.open&&dl.date?`<p class="dl">אפשר להזמין ולשנות עד <b>${dmy(dl.date)}</b>${dl.days<=30?`<span class="cnt">${dl.days?'נותרו '+dl.days+' ימים':'היום אחרון!'}</span>`:''}</p>`:''}</div>
  <div class="hero-art">${SHELF}</div></section>
- <section class="how"><div><i>👧</i><b>מזהים</b><span>בוחרים את שם התלמידה ומאמתים בקוד לוואטסאפ או למייל</span></div><div><i>📚</i><b>מסמנים</b><span>רק הספרים של הכיתה שלה מופיעים – מסמנים וי</span></div><div><i>💳</i><b>משלמים</b><span>הוראת קבע, אשראי, או מזומן וצ׳ק במזכירות</span></div><div><i>😊</i><b>מקבלים</b><span>נעדכן אתכם מיד כשהספרים מגיעים</span></div></section>`};
+ ${(T().how||[]).filter(x=>x.t).length?`<section class="how">${T().how.filter(x=>x.t).map(x=>`<div><i>${esc(x.i)}</i><b>${esc(x.t)}</b><span>${esc(x.s)}</span></div>`).join('')}</section>`:''}`};
 
 V.id=()=>{const ch=D.set.otp==='both'?`<div class="seg" role="radiogroup" aria-label="איך לשלוח את הקוד"><label><input type="radio" name="ch" value="wa" ${F.ch!=='email'?'checked':''}><span>${ICON.wa} בוואטסאפ</span></label><label><input type="radio" name="ch" value="email" ${F.ch==='email'?'checked':''}><span>${ICON.mail} במייל</span></label></div>`:'';
  const cls=[...new Set((STU||[]).map(s=>s.cls))].sort(clsSort);
@@ -653,7 +653,7 @@ function shabNow(){if(!D.set.shabbat)return null;const now=Date.now(),p=ilParts(
  if(todayR&&now<ss+45*6e4)return{w:todayR,end:ss+45*6e4};
  if(tomR&&now>ss-40*6e4){let e=sunset(tp.year,tp.month,tp.day)+45*6e4;let q=ilParts(e+864e5);if(isRest(q.year,q.month,q.day))e=sunset(q.year,q.month,q.day)+45*6e4;return{w:tomR,end:e}}
  return null}
-const adminLive=()=>!!window.__ADM;
+const adminLive=()=>!!(window.__BK_ADMIN||window.__BK_PV);
 function showShab(s){const E=$('#shab');const t=new Date(s.end).toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit',timeZone:'Asia/Jerusalem'});
  E.innerHTML=`<div class="shc"><div class="candles"><i></i><i></i></div><h2>${s.w==='שבת'?'שבת שלום!':'חג שמח!'}</h2><p>מערכת הזמנת הספרים סגורה ${s.w==='שבת'?'בשבת':'בחג'}.<br>נשמח לראותכם ${s.w==='שבת'?'במוצאי שבת':'במוצאי החג'}, אחרי ${t}.</p></div>`;E.classList.add('on')}
 function shabCheck(){const s=shabNow();if(s&&!adminLive())showShab(s);else $('#shab').classList.remove('on')}
@@ -691,6 +691,15 @@ function shell(){theme();document.title=D.seo.title||D.brand;const md=$('meta[na
  $('#f-con').innerHTML=(D.set.phone?`<a href="tel:${esc(ph(D.set.phone))}">📞 ${esc(D.set.phone)}</a>`:'')+(D.set.wa?`<a href="https://wa.me/972${esc(ph(D.set.wa).slice(1))}" target="_blank" rel="noopener">💬 וואטסאפ</a>`:'')+(D.set.email?`<a href="mailto:${esc(D.set.email)}">✉️ <bdi dir="ltr">${esc(D.set.email)}</bdi></a>`:'');
  chatInit()}
 shell();go('home',{nohist:true,instant:true});try{history.replaceState({v:'home'},'')}catch{}
+/* dashboard live preview only: show any screen with sample data (inactive on the real site) */
+if(window.__BK_PV)addEventListener('message',e=>{const v=e.data&&e.data.bkpv;if(!v||!V[v]||e.source!==parent)return;
+ const g=D.grades.find(x=>D.books.some(b=>b.on!==false&&b.grades.includes(x)))||D.grades[0]||'';
+ const k1={id:'pv1',name:'רחלי כהן',cls:g+'׳1',grade:g},k2={id:'pv2',name:'שרה כהן',cls:(D.grades[1]||g)+'׳2',grade:D.grades[1]||g};
+ const L=D.books.filter(b=>bookFor(b,g));Object.assign(F,{kid:'pv1',sid:'',sel:new Set(L.slice(0,3).map(b=>b.id)),pay:(D.pay.find(p=>p.on)||{}).id||'',via:'wa',phone:'0500000001',payOnly:false,demo:'123456'});
+ const o={books:[...F.sel],total:sumBooks([...F.sel]),pay:F.pay,status:'חדשה'};
+ SES=v==='home'||v==='id'?null:{token:'',phone:'0500000001',kids:[k1,k2],orders:['done','thanks','family'].includes(v)?{pv1:o}:{}};
+ if(v==='id'&&!STU)STU=DEMO_ST.map(s=>({id:s.id,name:s.name,cls:s.cls,grade:s.grade}));
+ go(v,{nohist:true,instant:true})});
 shabCheck();setInterval(shabCheck,60000);
 
 
